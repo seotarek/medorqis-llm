@@ -2,6 +2,8 @@ import os
 import sys
 import torch
 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+
 # Block broken torchvision check in transformers for Python 3.13
 sys.modules['torchvision'] = None
 sys.modules['torchvision.transforms'] = None
@@ -50,6 +52,7 @@ model = AutoModelForCausalLM.from_pretrained(
     trust_remote_code=True
 )
 model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+model.config.use_cache = False
 
 # 3. Add LoRA Adapters
 print("\n[Step 3/6] Configuring LoRA Adapters...")
@@ -112,6 +115,8 @@ training_args = TrainingArguments(
     warmup_steps=1,
     lr_scheduler_type="cosine",
     fp16=True,
+    gradient_checkpointing=True,
+    gradient_checkpointing_kwargs={"use_reentrant": False},
     logging_steps=1,
     save_strategy="no",
     report_to="none",
