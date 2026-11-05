@@ -63,17 +63,107 @@ def check_kernel_status(username="tarekkhallaf", slug="medorqis-llm"):
         print(f"[KAGGLE STATUS] {username}/{slug} returned HTTP {resp.status_code}: {resp.text}")
         return None
 
+def fetch_logs(username="tarekkhallaf", slug="medorqis-llm", tail=50):
+    url = f"{KAGGLE_API_BASE}/kernels/output?userName={username}&kernelSlug={slug}"
+    resp = requests.get(url, headers=get_headers())
+    if resp.status_code == 200:
+        data = resp.json()
+        log = data.get("log", "")
+        print(f"[KAGGLE LOGS] {username}/{slug} (length: {len(log)} chars):")
+        if not log:
+            print("(Log buffer is currently empty — container is booting or initializing)")
+            return ""
+        lines = log.splitlines()
+        for l in lines[-tail:]:
+            print(l)
+        return log
+    else:
+        print(f"[ERROR] Failed to fetch logs (HTTP {resp.status_code}): {resp.text}")
+        return None
+
+def push_training_and_benchmark(username="tarekkhallaf", slug="medorqis-llm"):
+    code = """
+import os, sys, subprocess
+
+print("=== Starting MedOrqis-LLM Cloud Run ===")
+subprocess.run(["nvidia-smi"])
+
+cmd = "pip install -q transformers peft bitsandbytes datasets accelerate huggingface_hub"
+subprocess.run(cmd, shell=True, check=True)
+
+print("=== Downloading latest training & benchmark scripts ===")
+subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/training/train_medorqis_cloud.py", "-o", "train.py"], check=True)
+subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/benchmarks/run_clinical_benchmark.py", "-o", "bench.py"], check=True)
+
+print("=== Executing Train ===")
+subprocess.run(["python3", "train.py"], check=True)
+
+print("=== Executing Benchmark ===")
+subprocess.run(["python3", "bench.py"], check=True)
+print("=== All Cloud Tasks Completed ===")
+"""
+    notebook = {
+        "cells": [
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [code.strip()]
+            }
+        ],
+        "metadata": {
+            "kernelspec": {
+                "display_name": "Python 3",
+                "language": "python",
+                "name": "python3"
+            },
+            "language_info": {
+                "name": "python",
+                "version": "3.10"
+            }
+        },
+        "nbformat": 4,
+        "nbformat_minor": 4
+    }
+
+    body = {
+        "slug": f"{username}/{slug}",
+        "newTitle": slug,
+        "text": json.dumps(notebook),
+        "language": "python",
+        "kernelType": "notebook",
+        "isPrivate": True,
+        "enableGpu": True,
+        "enableInternet": True
+    }
+
+    url = f"{KAGGLE_API_BASE}/kernels/push"
+    resp = requests.post(url, headers=get_headers(), json=body)
+    if resp.status_code == 200:
+        data = resp.json()
+        print(f"[KAGGLE PUSH SUCCESS] Version {data.get('versionNumber')} queued: {data.get('url')}")
+        return data
+    else:
+        print(f"[ERROR] Push failed (HTTP {resp.status_code}): {resp.text}")
+        return None
+
 def main():
     parser = argparse.ArgumentParser(description="MedOrqis Kaggle Cloud Orchestrator")
-    parser.add_argument("command", choices=["list", "status"], help="Command to execute")
+    parser.add_argument("command", choices=["list", "status", "logs", "push"], help="Command to execute")
     parser.add_argument("--user", default="tarekkhallaf", help="Kaggle username")
     parser.add_argument("--slug", default="medorqis-llm", help="Kernel slug")
+    parser.add_argument("--tail", type=int, default=50, help="Number of log lines to show")
     args = parser.parse_args()
 
     if args.command == "list":
         list_kernels(args.user)
     elif args.command == "status":
         check_kernel_status(args.user, args.slug)
+    elif args.command == "logs":
+        fetch_logs(args.user, args.slug, args.tail)
+    elif args.command == "push":
+        push_training_and_benchmark(args.user, args.slug)
 
 if __name__ == "__main__":
     main()
