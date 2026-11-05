@@ -66,11 +66,11 @@ tags:
 - safety-guardrails
 ---
 
-#  MedOrqis Clinical Instructions & Tool Calling Dataset
+# MedOrqis Clinical Instructions & Tool Calling Dataset
 
 The official foundational instruction-tuning and function-calling dataset for the **MedOrqis Medical Foundation Model** (`seotarek/medorqis-karnak-40b-lora`), built on top of `Applied-Innovation-Center/Karnak-40B-v1.0` and `Karnak-6B-v1.0`.
 
-##  Key Highlights
+## Key Highlights
 
 - **Bilingual (Arabic & English)**: Clinical scenarios encompassing Standard Medical Arabic, English, and regional dialect complaints (e.g., Egyptian colloquialisms).
 - **Native Tool-Calling (<tool_call>)**: Formatted specifically for Karnak / Qwen ChatML tool schemas.
@@ -95,7 +95,7 @@ Each JSONL record represents a conversational session with:
 - `tools`: Available tool declarations formatted in OpenAI/Qwen JSON Schema
 - `messages`: Conversational messages formatted in ChatML (`system`, `user`, `assistant`, `tool`)
 
-## ️ License & Attribution
+##  License & Attribution
 
 Licensed under Apache 2.0. Developed as part of the MedOrqis Medical AI Skills Ecosystem.
 """
@@ -126,8 +126,8 @@ def upload_dataset():
     except Exception as e:
         print(f"[NOTE] create_repo notice: {e}")
 
-    # 2. Upload JSONL dataset
-    print(f"[2/4] Uploading {LOCAL_DATASET_FILE}...")
+    # 2. Upload JSONL dataset (100 scenarios)
+    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (100 clinical scenarios)...")
     api.upload_file(
         path_or_fileobj=LOCAL_DATASET_FILE,
         path_in_repo="train.jsonl",
@@ -135,23 +135,22 @@ def upload_dataset():
         repo_type="dataset",
         token=HF_TOKEN
     )
-    print("[SUCCESS] train.jsonl uploaded successfully.")
+    print("[SUCCESS] train.jsonl (100 scenarios) uploaded successfully.")
 
-    # 3. Upload held-out benchmark evaluation dataset
-    eval_file = "benchmarks/eval_dataset.jsonl"
-    if os.path.exists(eval_file):
-        print(f"[3/4] Uploading {eval_file}...")
-        api.upload_file(
-            path_or_fileobj=eval_file,
+    # Remove root eval.jsonl if present to prevent PyArrow schema cast collisions
+    try:
+        api.delete_file(
             path_in_repo="eval.jsonl",
             repo_id=REPO_ID,
             repo_type="dataset",
             token=HF_TOKEN
         )
-        print("[SUCCESS] eval.jsonl uploaded successfully.")
+        print("[SUCCESS] Purged legacy eval.jsonl from dataset root to guarantee clean schema casting.")
+    except Exception:
+        pass
 
-    # 4. Upload Dataset Card (README.md)
-    print("[4/4] Uploading Dataset Card (README.md)...")
+    # 3. Upload Dataset Card (README.md)
+    print("[3/3] Uploading Dataset Card (README.md)...")
     readme_path = "training/DATASET_README.md"
     with open(readme_path, "w", encoding="utf-8") as f:
         f.write(DATASET_README_CARD)
@@ -165,7 +164,7 @@ def upload_dataset():
     )
     print("[SUCCESS] Dataset Card (README.md) uploaded successfully.")
     print("=" * 65)
-    print(f" Dataset is LIVE at: https://huggingface.co/datasets/{REPO_ID}")
+    print(f"[LIVE] Dataset is LIVE at: https://huggingface.co/datasets/{REPO_ID}")
     print("=" * 65)
 
 if __name__ == "__main__":

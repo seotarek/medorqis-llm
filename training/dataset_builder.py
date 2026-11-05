@@ -138,6 +138,40 @@ CLINICAL_TOOLS_SCHEMA = [
                 "required": ["ref_id", "claim"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "convert_clinical_units",
+            "description": "Performs deterministic, physiological unit conversion across clinical laboratory values and patient parameters (creatinine mg/dL <-> umol/L, glucose mg/dL <-> mmol/L, weight lbs <-> kg, dose mcg <-> mg).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "value": {"type": "number", "description": "Numeric value to convert."},
+                    "from_unit": {"type": "string", "enum": ["mg/dL", "umol/L", "mmol/L", "lbs", "kg", "mcg", "mg", "g"], "description": "Source measurement unit."},
+                    "to_unit": {"type": "string", "enum": ["mg/dL", "umol/L", "mmol/L", "lbs", "kg", "mcg", "mg", "g"], "description": "Target measurement unit."},
+                    "analyte": {"type": "string", "enum": ["creatinine", "glucose", "weight", "mass"], "description": "Biological analyte or parameter."}
+                },
+                "required": ["value", "from_unit", "to_unit", "analyte"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "adjust_renal_drug_dose",
+            "description": "Calculates deterministic, guideline-grounded (KDIGO 2024 / FDA Renal Dosing) dose modifications for high-alert drugs based on estimated CrCl (mL/min) or eGFR (mL/min/1.73m2).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "drug_name": {"type": "string", "description": "Generic drug name (e.g. enoxaparin, metformin, apixaban, vancomycin, colchicine)."},
+                    "standard_dose": {"type": "string", "description": "Standard adult regimen without renal impairment."},
+                    "crcl_or_egfr": {"type": "number", "description": "Patient creatinine clearance or eGFR value."},
+                    "is_dialysis": {"type": "boolean", "description": "Whether patient is on hemodialysis.", "default": False}
+                },
+                "required": ["drug_name", "standard_dose", "crcl_or_egfr"]
+            }
+        }
     }
 ]
 
@@ -295,7 +329,7 @@ def get_curated_training_records() -> List[Dict[str, Any]]:
             },
             {
                 "role": "assistant",
-                "content": """️ **تحذير سريري حرج: تعارض دوائي خطير جداً (Major/Contraindicated Interaction)**:
+                "content": """ **تحذير سريري حرج: تعارض دوائي خطير جداً (Major/Contraindicated Interaction)**:
 
 1. **طبيعة التعارض**: يحتوي **Voltaren** على مادة الديكلوفيناك (مضاد التهاب غير ستيرويدي NSAID)، بينما **Marevan** هو الوارفارين (مضاد تخثر فيتامين K).
 2. **الآلية الخطرة**: الجمع بينهما يضاعف خطر حدوث **نزيف هضمي حاد وقاتل (Severe Gastrointestinal Bleeding)** بنسبة تصل إلى 3-5 أضعاف؛ حيث يثبط الديكلوفيناك تجمع الصفائح الدموية ويهيج بطانة المعدة بينما يعطل الوارفارين عوامل التخثر.
@@ -664,7 +698,7 @@ All personal identifiers (name, Egyptian NID, phone number, institutional site, 
             },
             {
                 "role": "assistant",
-                "content": """️ **Significant Clinical Warning: Drug Interaction (CYP2C19 Competitive Inhibition)**:
+                "content": """ **Significant Clinical Warning: Drug Interaction (CYP2C19 Competitive Inhibition)**:
 
 1. **Pharmacological Mechanism**: **Clopidogrel (Plavix)** is an inactive prodrug that requires activation by the hepatic enzyme **CYP2C19**. **Omeprazole (Prilosec)** significantly inhibits CYP2C19, cutting the production of clopidogrel's active antiplatelet metabolite by almost half, thereby significantly increasing the risk of **stent thrombosis and recurrent myocardial infarction**.
 2. **FDA & ACC/AHA Guideline Recommendation**: Co-administration of omeprazole or esomeprazole with clopidogrel should be strictly avoided in patients with coronary stents.

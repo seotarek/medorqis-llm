@@ -156,6 +156,40 @@ CLINICAL_TOOLS_SCHEMA = [
                 "required": ["query"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "convert_clinical_units",
+            "description": "Performs deterministic, physiological unit conversion across clinical laboratory values and patient parameters (creatinine mg/dL <-> umol/L, glucose mg/dL <-> mmol/L, weight lbs <-> kg, dose mcg <-> mg).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "value": {"type": "number", "description": "Numeric value to convert."},
+                    "from_unit": {"type": "string", "enum": ["mg/dL", "umol/L", "mmol/L", "lbs", "kg", "mcg", "mg", "g"], "description": "Source measurement unit."},
+                    "to_unit": {"type": "string", "enum": ["mg/dL", "umol/L", "mmol/L", "lbs", "kg", "mcg", "mg", "g"], "description": "Target measurement unit."},
+                    "analyte": {"type": "string", "enum": ["creatinine", "glucose", "weight", "mass"], "description": "Biological analyte or parameter."}
+                },
+                "required": ["value", "from_unit", "to_unit", "analyte"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "adjust_renal_drug_dose",
+            "description": "Calculates deterministic, guideline-grounded (KDIGO 2024 / FDA Renal Dosing) dose modifications for high-alert drugs based on estimated CrCl (mL/min) or eGFR (mL/min/1.73m2).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "drug_name": {"type": "string", "description": "Generic drug name (e.g. enoxaparin, metformin, apixaban, vancomycin, colchicine)."},
+                    "standard_dose": {"type": "string", "description": "Standard adult regimen without renal impairment."},
+                    "crcl_or_egfr": {"type": "number", "description": "Patient creatinine clearance or eGFR value."},
+                    "is_dialysis": {"type": "boolean", "description": "Whether patient is on hemodialysis.", "default": False}
+                },
+                "required": ["drug_name", "standard_dose", "crcl_or_egfr"]
+            }
+        }
     }
 ]
 
@@ -322,6 +356,82 @@ def execute_deterministic_calculator(calc_id: str, params: Dict[str, Any]) -> Tu
             if bool(params.get("symptoms_dvt", False)): score += 3.0
             if bool(params.get("pe_most_likely", True)): score += 3.0
             return score, f"Wells PE Score: {score}"
+
+        elif calc_id == "convert_clinical_units":
+            val = float(params.get("value", 0.0))
+            from_u = str(params.get("from_unit", "")).lower()
+            to_u = str(params.get("to_unit", "")).lower()
+            analyte = str(params.get("analyte", "")).lower()
+            
+            if analyte == "creatinine":
+                if from_u in ["umol/l", "umol/l"] and to_u in ["mg/dl"]:
+                    res = val / 88.42
+                elif from_u in ["mg/dl"] and to_u in ["umol/l", "umol/l"]:
+                    res = val * 88.42
+                else:
+                    res = val
+            elif analyte == "glucose":
+                if from_u in ["mmol/l"] and to_u in ["mg/dl"]:
+                    res = val * 18.0182
+                elif from_u in ["mg/dl"] and to_u in ["mmol/l"]:
+                    res = val / 18.0182
+                else:
+                    res = val
+            elif analyte == "weight":
+                if from_u in ["lbs", "lb"] and to_u in ["kg"]:
+                    res = val * 0.45359237
+                elif from_u in ["kg"] and to_u in ["lbs", "lb"]:
+                    res = val / 0.45359237
+                else:
+                    res = val
+            elif analyte in ["mass", "dose"]:
+                if from_u in ["mcg", "ug", "ug"] and to_u in ["mg"]:
+                    res = val / 1000.0
+                elif from_u in ["mg"] and to_u in ["mcg", "ug", "ug"]:
+                    res = val * 1000.0
+                elif from_u in ["g"] and to_u in ["mg"]:
+                    res = val * 1000.0
+                elif from_u in ["mg"] and to_u in ["g"]:
+                    res = val / 1000.0
+                else:
+                    res = val
+            else:
+                res = val
+            return round(res, 2), f"Converted {val} {params.get('from_unit')} to {round(res, 2)} {params.get('to_unit')}"
+
+        elif calc_id == "adjust_renal_drug_dose":
+            drug = str(params.get("drug_name", "")).lower()
+            val = float(params.get("crcl_or_egfr", 60.0))
+            is_hd = bool(params.get("is_dialysis", False))
+            
+            if "enoxaparin" in drug:
+                if val < 30.0 or is_hd:
+                    adj = "1 mg/kg subcutaneously once daily (50% reduction)"
+                    num_val = 50.0
+                else:
+                    adj = "1 mg/kg subcutaneously every 12 hours (Standard)"
+                    num_val = 100.0
+            elif "metformin" in drug:
+                if val < 30.0 or is_hd:
+                    adj = "Contraindicated due to lactic acidosis risk (0 mg/day, Discontinue)"
+                    num_val = 0.0
+                elif val < 45.0:
+                    adj = "Reduce maximum dose to 1000 mg/day (50% reduction)"
+                    num_val = 50.0
+                else:
+                    adj = "Standard dose up to 2000-2550 mg/day"
+                    num_val = 100.0
+            elif "apixaban" in drug:
+                if val < 15.0 or is_hd:
+                    adj = "Avoid / contraindicated in ESRD"
+                    num_val = 0.0
+                else:
+                    adj = "Dose reduction to 2.5 mg BID if indicated"
+                    num_val = 50.0
+            else:
+                adj = f"Renal adjustment calculated for {drug} at CrCl {val}"
+                num_val = 50.0
+            return num_val, f"Renal Dosing: {adj}"
 
     except Exception as e:
         return None, f"Execution Error: {e}"

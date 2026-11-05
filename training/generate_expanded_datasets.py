@@ -119,7 +119,7 @@ def generate_expanded_datasets():
                 {"role": "assistant", "content": "I will screen for severe CYP3A4 pharmacokinetic interactions between simvastatin and clarithromycin.",
                  "tool_calls": [{"type": "function", "function": {"name": "check_drug_interactions", "arguments": {"medications": ["Simvastatin", "Clarithromycin"]}}}]},
                 {"role": "tool", "name": "check_drug_interactions", "content": json.dumps({"status": "CONTRAINDICATED", "severity": "MAJOR", "pair": ["Simvastatin", "Clarithromycin"], "mechanism": "Clarithromycin is a potent CYP3A4 inhibitor that increases simvastatin plasma concentrations by over 10-fold, dramatically escalating the risk of severe myopathy and life-threatening rhabdomyolysis.", "clinical_action": "Contraindicated. Temporarily suspend simvastatin or switch antibiotic to azithromycin / amoxicillin."})},
-                {"role": "assistant", "content": "️ **Severe Interaction Warning (CYP3A4 Inhibition & Rhabdomyolysis)**:\n\n1. **Mechanism**: Clarithromycin is a potent inhibitor of CYP3A4. Co-administration can increase simvastatin bioavailability by **over 1000% (10x)**, precipitating acute **rhabdomyolysis**, myoglobinuria, and acute kidney injury.\n2. **Guideline Recommendations (FDA & ESC)**:\n   - **Option A**: Temporarily suspend simvastatin for the duration of clarithromycin therapy plus 2 days after completion.\n   - **Option B**: Switch antimicrobial to an alternative that does not inhibit CYP3A4, such as **Azithromycin** or **Amoxicillin**."}
+                {"role": "assistant", "content": " **Severe Interaction Warning (CYP3A4 Inhibition & Rhabdomyolysis)**:\n\n1. **Mechanism**: Clarithromycin is a potent inhibitor of CYP3A4. Co-administration can increase simvastatin bioavailability by **over 1000% (10x)**, precipitating acute **rhabdomyolysis**, myoglobinuria, and acute kidney injury.\n2. **Guideline Recommendations (FDA & ESC)**:\n   - **Option A**: Temporarily suspend simvastatin for the duration of clarithromycin therapy plus 2 days after completion.\n   - **Option B**: Switch antimicrobial to an alternative that does not inhibit CYP3A4, such as **Azithromycin** or **Amoxicillin**."}
             ]
         },
         # 18. Emergency - Acute STEMI Red Flag Escalation
@@ -168,9 +168,13 @@ def generate_expanded_datasets():
             ]
         }
     ]
-    # Import and add high-fidelity clinical cases 21 to 30
+    # Import and add high-fidelity clinical cases 21 to 50
     from training.expanded_cases import EXPANDED_CLINICAL_CASES
     additional_train.extend(EXPANDED_CLINICAL_CASES)
+
+    # Import and add clinical cases 51 to 100
+    from training.clinical_cases_expansion_part2 import EXPANDED_CLINICAL_CASES_PART2
+    additional_train.extend(EXPANDED_CLINICAL_CASES_PART2)
 
     train_records.extend(additional_train)
     
@@ -262,6 +266,46 @@ def generate_expanded_datasets():
             "ground_truth_params": {"age_years": 80, "weight_kg": 50, "serum_creatinine_mg_dl": 1.5, "sex": "female"},
             "ground_truth_math_result": 23.6, # ((140 - 80) * 50) / (72 * 1.5) * 0.85 = 23.61 mL/min
             "category": "pharmacology"
+        },
+        {
+            "id": "eval-unit-011",
+            "prompt": "Convert a serum creatinine laboratory value of 176.8 umol/L to mg/dL for clinical evaluation.",
+            "expected_calculator": "convert_clinical_units",
+            "ground_truth_params": {"value": 176.8, "from_unit": "umol/L", "to_unit": "mg/dL", "analyte": "creatinine"},
+            "ground_truth_math_result": 2.0,
+            "category": "unit_conversion"
+        },
+        {
+            "id": "eval-renal-012",
+            "prompt": "Adjust therapeutic enoxaparin dose for a patient with acute DVT whose calculated CrCl is 22 mL/min.",
+            "expected_calculator": "adjust_renal_drug_dose",
+            "ground_truth_params": {"drug_name": "enoxaparin", "standard_dose": "1 mg/kg q12h", "crcl_or_egfr": 22.0},
+            "ground_truth_math_result": 50.0,
+            "category": "renal_dosing"
+        },
+        {
+            "id": "eval-peds-ceiling-013",
+            "prompt": "Calculate single oral paracetamol dose for a 75 kg adolescent (15 mg/kg, max adult single dose 1000 mg).",
+            "expected_calculator": "calculate_pediatric_weight_dose",
+            "ground_truth_params": {"age_years": 15, "weight_kg": 75, "dose_per_kg": 15, "max_single_adult_dose_mg": 1000},
+            "ground_truth_math_result": 1000.0,
+            "category": "pediatrics"
+        },
+        {
+            "id": "eval-ddi-triple-014",
+            "prompt": "Screen for severe interaction in a patient taking Enalapril, Furosemide, and Ibuprofen together.",
+            "expected_calculator": "check_drug_interactions",
+            "ground_truth_params": {"medications": ["enalapril", "furosemide", "ibuprofen"]},
+            "ground_truth_math_result": "FATAL_TRIPLE_WHAMMY",
+            "category": "pharmacology"
+        },
+        {
+            "id": "eval-dialect-stemi-015",
+            "prompt": "مريض مصري يقول: 'عندي حرقان نار في فم المعدة مع سكاكين بضهري وكتفي الشمال وعرقان ومدوخ'. افحص العلامات الحمراء.",
+            "expected_calculator": "check_red_flags",
+            "ground_truth_params": {"findings": ["حرقان فم المعدة", "سكاكين بضهري وكتفي الشمال", "عرقان ومدوخ"]},
+            "ground_truth_math_result": "INFERIOR_STEMI_EMERGENCY",
+            "category": "dialectal"
         }
     ]
     

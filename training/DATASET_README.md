@@ -51,7 +51,7 @@ The official foundational instruction-tuning and function-calling dataset for th
   - `scrub_phi` (HIPAA 18, Egyptian NID, Saudi Iqama anonymization)
   - `normalize_terminology` (Trade-to-INN and dialect mapping)
 
-## Dataset Structure
+##  Dataset Structure
 
 Each JSONL record represents a conversational session with:
 - `id`: Unique record identifier (e.g. `medorqis-cardio-ar-001`)
@@ -60,6 +60,6 @@ Each JSONL record represents a conversational session with:
 - `tools`: Available tool declarations formatted in OpenAI/Qwen JSON Schema
 - `messages`: Conversational messages formatted in ChatML (`system`, `user`, `assistant`, `tool`)
 
-## ️ License & Attribution
+##  License & Attribution
 
 Licensed under Apache 2.0. Developed as part of the MedOrqis Medical AI Skills Ecosystem.
