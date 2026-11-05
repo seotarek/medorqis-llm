@@ -43,8 +43,8 @@ def _load_env_file():
 
 _load_env_file()
 HF_TOKEN = os.getenv("HF_TOKEN", "")
-DEFAULT_MODEL_ID = "Applied-Innovation-Center/Karnak-40B-v1.0"
-DEFAULT_OUTPUT_REPO = "seotarek/medorqis-karnak-40b-lora"
+DEFAULT_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
+DEFAULT_OUTPUT_REPO = "seotarek/medorqis-llm"
 
 
 def parse_args():
