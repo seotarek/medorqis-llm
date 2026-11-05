@@ -1,4 +1,4 @@
-# 🩺 MedOrqis-LLM
+# MedOrqis-LLM
 ### Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -11,7 +11,7 @@
 
 ---
 
-## 📌 1. Overview & Architectural Lineage
+## 1. Overview & Architectural Lineage
 
 **MedOrqis-LLM** is an open-weights, bilingual (Arabic & English) clinical decision-intelligence foundation model. Fine-tuned on top of **`Applied-Innovation-Center/Karnak-6B-v1.0`** via **QLoRA (4-bit NF4)**, it acts as the primary **Clinical Brain** of the MedOrqis ecosystem.
 
@@ -27,13 +27,13 @@ Qwen Architecture (Alibaba)
 
 Unlike generic conversational models that frequently hallucinate critical drug dosages or risk calculations, MedOrqis-LLM is explicitly fine-tuned under strict clinical governance: **whenever an inquiry involves arithmetic risk scoring, renal clearance, pediatric weight-based dosing, or severe drug interactions, the model refuses to guess probabilistically and instead emits a native `<tool_call>` targeting verified deterministic clinical calculators**.
 
-> 💡 **Looking for Clinical Skills & MCP Server Only?**:  
+>  **Looking for Clinical Skills & MCP Server Only?**:  
 > If you already use an external LLM (Claude 3.5 Sonnet, GPT-4o, Gemini) and only need the 24 specialized clinical skills, 12 zero-token calculators, and MCP server, visit our partner repository:  
-> 🔗 **[seotarek/MedOrqis — Medical AI Skills Ecosystem](https://github.com/seotarek/MedOrqis)**
+>  **[seotarek/MedOrqis — Medical AI Skills Ecosystem](https://github.com/seotarek/MedOrqis)**
 
 ---
 
-## 🏛️ 2. The Dual-Track Architecture
+## ️ 2. The Dual-Track Architecture
 
 ```mermaid
 graph TD
@@ -50,7 +50,7 @@ graph TD
 
 ---
 
-## 📊 3. Empirical Clinical Benchmark (Zero Flattery)
+## 3. Empirical Clinical Benchmark (Zero Flattery)
 
 Evaluated head-to-head against the raw base foundation model across 10 independent held-out clinical scenarios (Cardiology, Nephrology, Pulmonology, Pediatrics, and Pharmacology):
 
@@ -62,11 +62,11 @@ Evaluated head-to-head against the raw base foundation model across 10 independe
 | **Arithmetic Calculation Error Rate** | `80.0%` | **`0.00%`** | **`-80.0%`** | Eliminates probabilistic LLM math hallucinations |
 | **Pediatric Overdose Ceiling Compliance** | `0.0%` | **`100.0%`** | **`+100.0%`** | Mandatory adult maximum dose ceiling cap |
 
-> 🌐 **Interactive Benchmark Showcase**: Explore live side-by-side prompt comparisons and telemetry charts at **[seotarek.github.io/medorqis-llm](https://seotarek.github.io/medorqis-llm/)**.
+>  **Interactive Benchmark Showcase**: Explore live side-by-side prompt comparisons and telemetry charts at **[seotarek.github.io/medorqis-llm](https://seotarek.github.io/medorqis-llm/)**.
 
 ---
 
-## 🚀 4. Model Inference & Quickstart (Python)
+## 4. Model Inference & Quickstart (Python)
 
 You can load and query **MedOrqis-LLM** directly via Hugging Face `transformers` and `peft`, utilizing the bundled native chat template:
 
@@ -126,11 +126,11 @@ vllm serve Applied-Innovation-Center/Karnak-6B-v1.0 \
     --dtype float16
 ```
 
-> 💡 **Context Window Rationale**: While the tokenizer supports an extended native context window of up to 131,072 tokens, `--max-model-len 4096` is the recommended setting for production deployments on edge/commodity GPUs (e.g. NVIDIA T4 / L4) to minimize KV-cache footprint and maximize concurrent throughput.
+>  **Context Window Rationale**: While the tokenizer supports an extended native context window of up to 131,072 tokens, `--max-model-len 4096` is the recommended setting for production deployments on edge/commodity GPUs (e.g. NVIDIA T4 / L4) to minimize KV-cache footprint and maximize concurrent throughput.
 
 ---
 
-## 🧮 5. Integrated Clinical Tools & Deterministic Calculators
+## 5. Integrated Clinical Tools & Deterministic Calculators
 
 MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions:
 
@@ -151,7 +151,7 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## 📚 6. Training Datasets & Clinical Governance
+## 6. Training Datasets & Clinical Governance
 
 - **Instruction Dataset**: [`seotarek/medorqis-clinical-instructions`](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
 - **Dialect Benchmark Dataset**: [`seotarek/medorqis-clinical-dialect-benchmark`](https://huggingface.co/datasets/seotarek/medorqis-clinical-dialect-benchmark)
@@ -159,13 +159,13 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## 🛡️ 7. Clinical Safety & Medical Disclaimer
+## ️ 7. Clinical Safety & Medical Disclaimer
 
 > **IMPORTANT MEDICAL NOTICE**: **MedOrqis-LLM** is an experimental clinical decision-support research tool. It is **not** an autonomous medical device and must never substitute for the clinical evaluation, diagnosis, or treatment decisions of a qualified and licensed human healthcare professional. Clinicians must independently verify all algorithmic recommendations.
 
 ---
 
-## 📜 8. License & Citation
+## 8. License & Citation
 
 Licensed under **Apache 2.0**.
 

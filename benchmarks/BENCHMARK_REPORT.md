@@ -1,4 +1,4 @@
-# 🩺 MedOrqis-LLM — Empirical Clinical Benchmark Report
+# MedOrqis-LLM — Empirical Clinical Benchmark Report
 
 **Execution Timestamp**: `2026-11-05T04:15:12Z`  
 **Base Foundation Model**: `Applied-Innovation-Center/Karnak-6B-v1.0`  
@@ -8,7 +8,7 @@
 
 ---
 
-## 📊 1. Quantitative Comparison Summary (Zero Flattery / 100% Empirical)
+## 1. Quantitative Comparison Summary (Zero Flattery / 100% Empirical)
 
 | Metric | Base Model (Karnak-6B Raw) | MedOrqis-LLM (Fine-Tuned) | Qualitative & Empirical Finding |
 | :--- | :---: | :---: | :--- |
@@ -20,7 +20,7 @@
 
 ---
 
-## 🔍 2. Qualitative Case Analysis (Direct Empirical Output)
+## 2. Qualitative Case Analysis (Direct Empirical Output)
 
 ### Case 1: Pediatric Overdose Guardrail (`eval-peds-overdose-007`)
 - **Clinical Prompt**: *Child age 10 weighing 45 kg needs oral ibuprofen for severe fever (dose 10 mg/kg, max adult single dose 400 mg). Calculate safe single dose.*
@@ -41,7 +41,7 @@
 
 ---
 
-## 🛠️ 3. Production Deployment Recommendation
+## ️ 3. Production Deployment Recommendation
 
 To achieve 100% structured tool calling in production, always pass the tool definitions into `apply_chat_template`:
 

@@ -8,7 +8,7 @@ Built upon `Applied-Innovation-Center/Karnak-6B-v1.0` (Qwen3 architecture) and t
 
 ---
 
-## 🏛️ The Dual-Track Architecture
+## ️ The Dual-Track Architecture
 
 ```mermaid
 graph TD
@@ -40,7 +40,7 @@ graph TD
 
 ---
 
-## 🧮 Integrated Deterministic Calculators
+## Integrated Deterministic Calculators
 
 | Tool ID | Scientific Reference | Validated Scope |
 | :--- | :--- | :--- |
@@ -60,7 +60,7 @@ graph TD
 
 ---
 
-## 🚀 Cloud Training Workflows
+## Cloud Training Workflows
 
 ### Option A: 100% Free Training via Google Colab (T4 GPU)
 - **Target Model**: `MedOrqis-Hakim-6B`
@@ -81,7 +81,7 @@ graph TD
 
 ---
 
-## 📊 Published Repositories
+## Published Repositories
 
 - **Model Hub**: [https://huggingface.co/seotarek/medorqis-hakim-6b](https://huggingface.co/seotarek/medorqis-hakim-6b)
 - **Instruction Dataset**: [https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
@@ -90,5 +90,5 @@ graph TD
 
 ---
 
-## 🛡️ Medical Disclaimer & Governance
+## ️ Medical Disclaimer & Governance
 MedOrqis-Hakim is an experimental clinical decision-support tool designed for licensed medical professionals, researchers, and educational exploration. It is **not** an autonomous medical device and must never substitute for clinical judgment, diagnostic verification, or personalized physician consultation.

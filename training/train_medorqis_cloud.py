@@ -26,7 +26,7 @@ OUTPUT_REPO = "seotarek/medorqis-llm"
 LORA_SAVE_DIR = "./medorqis-llm-lora-final"
 
 print("=" * 70)
-print("🩺 MEDORQIS-LLM — OFFICIAL CLOUD TRAINING & PUBLISHING PIPELINE")
+print(" MEDORQIS-LLM — OFFICIAL CLOUD TRAINING & PUBLISHING PIPELINE")
 print("=" * 70)
 
 # 1. Load Tokenizer
@@ -145,6 +145,6 @@ print(f"Pushing tokenizer to {OUTPUT_REPO}...")
 tokenizer.push_to_hub(OUTPUT_REPO, token=HF_TOKEN)
 
 print("=" * 70)
-print(f"🎉 SUCCESS! MedOrqis-LLM LoRA weights are now LIVE on Hugging Face:")
-print(f"👉 https://huggingface.co/{OUTPUT_REPO}")
+print(f" SUCCESS! MedOrqis-LLM LoRA weights are now LIVE on Hugging Face:")
+print(f" https://huggingface.co/{OUTPUT_REPO}")
 print("=" * 70)

@@ -104,7 +104,7 @@ def generate_expanded_datasets():
                 {"role": "assistant", "content": "سأفحص التفاعل الدوائي الخطر بين موسعات الأوعية النتراتية ومثبطات PDE5 عبر محرك السلامة الدوائية.",
                  "tool_calls": [{"type": "function", "function": {"name": "check_drug_interactions", "arguments": {"medications": ["Nitroglycerin", "Sildenafil"]}}}]},
                 {"role": "tool", "name": "check_drug_interactions", "content": json.dumps({"status": "CONTRAINDICATED", "severity": "FATAL", "pair": ["Nitroglycerin", "Sildenafil"], "mechanism": "Synergistic cGMP accumulation causing profound, refractory systemic vasodilation, catastrophic hypotension, and fatal myocardial infarction.", "clinical_action": "ABSOLUTELY CONTRAINDICATED. Must never be prescribed or taken concurrently."})},
-                {"role": "assistant", "content": "🚨 **تحذير دوائي عالي الخطورة (ممنوع منعاً باتاً / Absolute Contraindication)**:\n\n1. **آلية الخطر**: الجمع بين النيترات (Nitroglycerin) ومثبطات فوسفو داي إستراز-5 (Sildenafil) يؤدي إلى تراكم مفرط لمركب cGMP في العضلات الملساء للأوعية الدموية، مما يسبب **هبوطاً حاداً وكارثياً في ضغط الدم (Refractory Hypotension)** قد يؤدي للوفاة أو احتشاء عضلة القلب الفوري.\n2. **التوصية الحاسمة**: يمنع منعاً قاطعاً تناول السيلدينافيل لأي مريض يتناول النيترات. يجب الانتظار 24 ساعة على الأقل بعد السيلدينافيل قبل التفكير بإعطاء أي نترات، واستشارة طبيب الذكورة والقلب لبحث بدائل غير نتراتية وغير وعائية."}
+                {"role": "assistant", "content": " **تحذير دوائي عالي الخطورة (ممنوع منعاً باتاً / Absolute Contraindication)**:\n\n1. **آلية الخطر**: الجمع بين النيترات (Nitroglycerin) ومثبطات فوسفو داي إستراز-5 (Sildenafil) يؤدي إلى تراكم مفرط لمركب cGMP في العضلات الملساء للأوعية الدموية، مما يسبب **هبوطاً حاداً وكارثياً في ضغط الدم (Refractory Hypotension)** قد يؤدي للوفاة أو احتشاء عضلة القلب الفوري.\n2. **التوصية الحاسمة**: يمنع منعاً قاطعاً تناول السيلدينافيل لأي مريض يتناول النيترات. يجب الانتظار 24 ساعة على الأقل بعد السيلدينافيل قبل التفكير بإعطاء أي نترات، واستشارة طبيب الذكورة والقلب لبحث بدائل غير نتراتية وغير وعائية."}
             ]
         },
         # 17. Pharmacology - Simvastatin + Clarithromycin Rhabdomyolysis
@@ -119,7 +119,7 @@ def generate_expanded_datasets():
                 {"role": "assistant", "content": "I will screen for severe CYP3A4 pharmacokinetic interactions between simvastatin and clarithromycin.",
                  "tool_calls": [{"type": "function", "function": {"name": "check_drug_interactions", "arguments": {"medications": ["Simvastatin", "Clarithromycin"]}}}]},
                 {"role": "tool", "name": "check_drug_interactions", "content": json.dumps({"status": "CONTRAINDICATED", "severity": "MAJOR", "pair": ["Simvastatin", "Clarithromycin"], "mechanism": "Clarithromycin is a potent CYP3A4 inhibitor that increases simvastatin plasma concentrations by over 10-fold, dramatically escalating the risk of severe myopathy and life-threatening rhabdomyolysis.", "clinical_action": "Contraindicated. Temporarily suspend simvastatin or switch antibiotic to azithromycin / amoxicillin."})},
-                {"role": "assistant", "content": "⚠️ **Severe Interaction Warning (CYP3A4 Inhibition & Rhabdomyolysis)**:\n\n1. **Mechanism**: Clarithromycin is a potent inhibitor of CYP3A4. Co-administration can increase simvastatin bioavailability by **over 1000% (10x)**, precipitating acute **rhabdomyolysis**, myoglobinuria, and acute kidney injury.\n2. **Guideline Recommendations (FDA & ESC)**:\n   - **Option A**: Temporarily suspend simvastatin for the duration of clarithromycin therapy plus 2 days after completion.\n   - **Option B**: Switch antimicrobial to an alternative that does not inhibit CYP3A4, such as **Azithromycin** or **Amoxicillin**."}
+                {"role": "assistant", "content": "️ **Severe Interaction Warning (CYP3A4 Inhibition & Rhabdomyolysis)**:\n\n1. **Mechanism**: Clarithromycin is a potent inhibitor of CYP3A4. Co-administration can increase simvastatin bioavailability by **over 1000% (10x)**, precipitating acute **rhabdomyolysis**, myoglobinuria, and acute kidney injury.\n2. **Guideline Recommendations (FDA & ESC)**:\n   - **Option A**: Temporarily suspend simvastatin for the duration of clarithromycin therapy plus 2 days after completion.\n   - **Option B**: Switch antimicrobial to an alternative that does not inhibit CYP3A4, such as **Azithromycin** or **Amoxicillin**."}
             ]
         },
         # 18. Emergency - Acute STEMI Red Flag Escalation
@@ -134,7 +134,7 @@ def generate_expanded_datasets():
                 {"role": "assistant", "content": "سأفحص الأعراض فوراً عبر محرك العلامات الحمراء للطوارئ (Red Flags Engine) لتقييم متلازمة الشريان التاجي الحادة.",
                  "tool_calls": [{"type": "function", "function": {"name": "check_red_flags", "arguments": {"findings": ["crushing substernal chest pain", "radiation to jaw and left arm", "diaphoresis", "nausea"]}}}]},
                 {"role": "tool", "name": "check_red_flags", "content": json.dumps({"triage_level": "RED_FLAG_EMERGENCY", "suspected_condition": "Acute Coronary Syndrome / STEMI", "action": "Immediate 12-lead ECG within 10 minutes, activate Cath Lab for primary PCI, administer emergency antiplatelet loading."})},
-                {"role": "assistant", "content": "🚨 **حالة طوارئ قلبية حادة (Red Flag Emergency - STEMI Suspected)**:\n\nهذه الأعراض هي العلامات الكلاسيكية لاحتشاء عضلة القلب الحاد (Acute Myocardial Infarction). **الوقت يمثل عضلة القلب (Time is Muscle)**.\n\n**الإجراءات الفورية اللازمة (ESC / AHA Guidelines)**:\n1. **تخطيط قلب كهربائي (12-Lead ECG) خلال 10 دقائق فوراً** لتأكيد ارتفاع مقطع ST.\n2. **تفعيل قسطرة القلب الفورية (Primary PCI)** إن تأكد STEMI (هدف زمن البالون < 90 دقيقة).\n3. **العلاج الدوائي الإسعافي الفوري**: مضغ أقراص أسبرين 300 ملغ (Chewable Aspirin) + مانع تجلط فموي P2Y12 (Ticagrelor 180mg أو Clopidogrel 600mg) بعد نفي النزيف.\n4. تأمين خط وريدي ومراقبة العلامات الحيوية وإعطاء مسكن ألم (Morphine IV) إذا استمر الألم."}
+                {"role": "assistant", "content": " **حالة طوارئ قلبية حادة (Red Flag Emergency - STEMI Suspected)**:\n\nهذه الأعراض هي العلامات الكلاسيكية لاحتشاء عضلة القلب الحاد (Acute Myocardial Infarction). **الوقت يمثل عضلة القلب (Time is Muscle)**.\n\n**الإجراءات الفورية اللازمة (ESC / AHA Guidelines)**:\n1. **تخطيط قلب كهربائي (12-Lead ECG) خلال 10 دقائق فوراً** لتأكيد ارتفاع مقطع ST.\n2. **تفعيل قسطرة القلب الفورية (Primary PCI)** إن تأكد STEMI (هدف زمن البالون < 90 دقيقة).\n3. **العلاج الدوائي الإسعافي الفوري**: مضغ أقراص أسبرين 300 ملغ (Chewable Aspirin) + مانع تجلط فموي P2Y12 (Ticagrelor 180mg أو Clopidogrel 600mg) بعد نفي النزيف.\n4. تأمين خط وريدي ومراقبة العلامات الحيوية وإعطاء مسكن ألم (Morphine IV) إذا استمر الألم."}
             ]
         },
         # 19. Dialectal Arabic - Egyptian Emergency Translation
@@ -168,30 +168,9 @@ def generate_expanded_datasets():
             ]
         }
     ]
-    
-    # Generate variations across other domains to reach 30+ comprehensive training scenarios
-    for idx, (calc_id, lang) in enumerate([
-        ("ckd_epi_2021_egfr", "en"), ("ckd_epi_2021_egfr", "ar"),
-        ("cha2ds2_va_esc2024", "en"), ("has_bled_score", "en"),
-        ("has_bled_score", "ar"), ("curb65_score", "ar"),
-        ("news2_score", "ar"), ("wells_pe_score", "en"),
-        ("wells_pe_score", "ar"), ("wells_dvt_score", "en")
-    ]):
-        base_ex = {
-            "id": f"medorqis-synth-{calc_id}-{lang}-{idx+21}",
-            "language": lang,
-            "domain": "calculators",
-            "tools": CLINICAL_TOOLS_SCHEMA,
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": f"Please evaluate clinical score {calc_id} for patient profile {idx+1} adhering strictly to international clinical standards."},
-                {"role": "assistant", "content": f"Invoking deterministic calculator {calc_id} to ensure mathematical precision.",
-                 "tool_calls": [{"type": "function", "function": {"name": "calculate_clinical_score", "arguments": {"calculator_id": calc_id, "parameters": {"score_param": idx + 1}}}}]},
-                {"role": "tool", "name": "calculate_clinical_score", "content": json.dumps({"calculator_id": calc_id, "result": "Calculated via MedOrqis Zero-Token Engine", "verified": True})},
-                {"role": "assistant", "content": f"The calculated {calc_id} provides deterministic risk stratification according to international guidelines."}
-            ]
-        }
-        additional_train.append(base_ex)
+    # Import and add high-fidelity clinical cases 21 to 30
+    from training.expanded_cases import EXPANDED_CLINICAL_CASES
+    additional_train.extend(EXPANDED_CLINICAL_CASES)
 
     train_records.extend(additional_train)
     

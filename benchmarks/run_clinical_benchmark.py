@@ -108,7 +108,7 @@ def evaluate_response(response_text: str, case: dict, is_lora: bool):
 
 def main():
     print("=" * 70)
-    print("🩺 MEDORQIS-LLM — OFFICIAL EMPIRICAL CLINICAL BENCHMARK")
+    print(" MEDORQIS-LLM — OFFICIAL EMPIRICAL CLINICAL BENCHMARK")
     print("=" * 70)
     
     eval_cases = load_eval_data()
@@ -213,7 +213,7 @@ def main():
         json.dump(summary, f, indent=2, ensure_ascii=False)
         
     # Write Markdown Report
-    md_content = f"""# 🩺 MedOrqis-LLM — Empirical Clinical Benchmark Report
+    md_content = f"""#  MedOrqis-LLM — Empirical Clinical Benchmark Report
 
 **Execution Timestamp**: `{summary['timestamp']}`  
 **Base Model**: `{BASE_MODEL_ID}`  
@@ -222,7 +222,7 @@ def main():
 
 ---
 
-## 📊 1. Quantitative Comparison Summary
+##  1. Quantitative Comparison Summary
 
 | Clinical Evaluation Metric | Base Model (Karnak-6B) | MedOrqis-LLM (Fine-Tuned) | Absolute Delta | Evaluation Goal |
 | :--- | :---: | :---: | :---: | :--- |
@@ -234,7 +234,7 @@ def main():
 
 ---
 
-## 🔍 2. Qualitative Clinical Analysis (Zero Flattery)
+##  2. Qualitative Clinical Analysis (Zero Flattery)
 
 1. **Why Base Model Fails at Arithmetic**:
    Standard autoregressive models (including Karnak-6B, Llama-3, and GPT-4) generate text token-by-token using probabilistic next-token prediction. When tasked with exponential formulas like **CKD-EPI 2021** ($\text{eGFR} = 141 \times \\min(\text{SCr}/\\kappa, 1)^\\alpha \\times \\dots$), base models guess numbers that "sound plausible" but deviate by 15-40%, introducing severe diagnostic and dosing risks.

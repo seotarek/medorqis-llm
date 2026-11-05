@@ -295,7 +295,7 @@ def get_curated_training_records() -> List[Dict[str, Any]]:
             },
             {
                 "role": "assistant",
-                "content": """⚠️ **تحذير سريري حرج: تعارض دوائي خطير جداً (Major/Contraindicated Interaction)**:
+                "content": """️ **تحذير سريري حرج: تعارض دوائي خطير جداً (Major/Contraindicated Interaction)**:
 
 1. **طبيعة التعارض**: يحتوي **Voltaren** على مادة الديكلوفيناك (مضاد التهاب غير ستيرويدي NSAID)، بينما **Marevan** هو الوارفارين (مضاد تخثر فيتامين K).
 2. **الآلية الخطرة**: الجمع بينهما يضاعف خطر حدوث **نزيف هضمي حاد وقاتل (Severe Gastrointestinal Bleeding)** بنسبة تصل إلى 3-5 أضعاف؛ حيث يثبط الديكلوفيناك تجمع الصفائح الدموية ويهيج بطانة المعدة بينما يعطل الوارفارين عوامل التخثر.
@@ -559,7 +559,7 @@ All personal identifiers (name, Egyptian NID, phone number, institutional site, 
             },
             {
                 "role": "assistant",
-                "content": """🚨 **تنبيه طبي طارئ: اشتباه قوي جداً بمتلازمة الشريان التاجي الحادة (Acute Coronary Syndrome - ACS)**:
+                "content": """ **تنبيه طبي طارئ: اشتباه قوي جداً بمتلازمة الشريان التاجي الحادة (Acute Coronary Syndrome - ACS)**:
 
 1. **الترجمة الطبية الدقيقة للشكوى العامية**:
    - **تقل وحرقان فم المعدة والكتف الأيسر**: ألم صدري خناقي وصفي مع تشعب للطرف العلوي والرقبة (Anginal retrosternal chest pain with left arm radiation).
@@ -616,7 +616,7 @@ All personal identifiers (name, Egyptian NID, phone number, institutional site, 
             },
             {
                 "role": "assistant",
-                "content": """🛑 **حالة طوارئ جراحية قصوى: اشتباه بمتلازمة ذنب الفرس (Cauda Equina Syndrome - CES)**:
+                "content": """ **حالة طوارئ جراحية قصوى: اشتباه بمتلازمة ذنب الفرس (Cauda Equina Syndrome - CES)**:
 
 1. **الخطورة**: ظهور **تنميل منطقة السرج (Saddle anesthesia)** مصحوباً بـ **سلس أو احتباس بولي وضعف في الساقين** يعني وجود انضغاط حاد وكبير على الحزمة العصبية أسفل الحبل الشوكي.
 2. **الإجراء العاجل**:
@@ -664,7 +664,7 @@ All personal identifiers (name, Egyptian NID, phone number, institutional site, 
             },
             {
                 "role": "assistant",
-                "content": """⚠️ **Significant Clinical Warning: Drug Interaction (CYP2C19 Competitive Inhibition)**:
+                "content": """️ **Significant Clinical Warning: Drug Interaction (CYP2C19 Competitive Inhibition)**:
 
 1. **Pharmacological Mechanism**: **Clopidogrel (Plavix)** is an inactive prodrug that requires activation by the hepatic enzyme **CYP2C19**. **Omeprazole (Prilosec)** significantly inhibits CYP2C19, cutting the production of clopidogrel's active antiplatelet metabolite by almost half, thereby significantly increasing the risk of **stent thrombosis and recurrent myocardial infarction**.
 2. **FDA & ACC/AHA Guideline Recommendation**: Co-administration of omeprazole or esomeprazole with clopidogrel should be strictly avoided in patients with coronary stents.

@@ -31,11 +31,11 @@ tags:
 - safety-guardrails
 ---
 
-# 🩺 MedOrqis Clinical Instructions & Tool Calling Dataset
+# MedOrqis Clinical Instructions & Tool Calling Dataset
 
 The official foundational instruction-tuning and function-calling dataset for the **MedOrqis Medical Foundation Model** (`seotarek/medorqis-karnak-40b-lora`), built on top of `Applied-Innovation-Center/Karnak-40B-v1.0` and `Karnak-6B-v1.0`.
 
-## 📌 Key Highlights
+## Key Highlights
 
 - **Bilingual (Arabic & English)**: Clinical scenarios encompassing Standard Medical Arabic, English, and regional dialect complaints (e.g., Egyptian colloquialisms).
 - **Native Tool-Calling (<tool_call>)**: Formatted specifically for Karnak / Qwen ChatML tool schemas.
@@ -51,7 +51,7 @@ The official foundational instruction-tuning and function-calling dataset for th
   - `scrub_phi` (HIPAA 18, Egyptian NID, Saudi Iqama anonymization)
   - `normalize_terminology` (Trade-to-INN and dialect mapping)
 
-## 📊 Dataset Structure
+## Dataset Structure
 
 Each JSONL record represents a conversational session with:
 - `id`: Unique record identifier (e.g. `medorqis-cardio-ar-001`)
@@ -60,6 +60,6 @@ Each JSONL record represents a conversational session with:
 - `tools`: Available tool declarations formatted in OpenAI/Qwen JSON Schema
 - `messages`: Conversational messages formatted in ChatML (`system`, `user`, `assistant`, `tool`)
 
-## 🛡️ License & Attribution
+## ️ License & Attribution
 
 Licensed under Apache 2.0. Developed as part of the MedOrqis Medical AI Skills Ecosystem.

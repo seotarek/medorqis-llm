@@ -59,7 +59,7 @@ model-index:
 
 <div align="center">
 
-# 🩺 MedOrqis-LLM
+#  MedOrqis-LLM
 ### Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -73,7 +73,7 @@ model-index:
 
 ---
 
-## 📌 1. Model Overview
+##  1. Model Overview
 
 **MedOrqis-LLM** is an open-weights, bilingual (Arabic & English) clinical decision-intelligence foundation model. Fine-tuned on top of **`Applied-Innovation-Center/Karnak-6B-v1.0`** (Qwen3 architecture) via **QLoRA 4-bit NF4**, it acts as the primary **Clinical Brain** of the MedOrqis ecosystem.
 
@@ -81,7 +81,7 @@ Unlike generic conversational models that frequently hallucinate critical drug d
 
 ---
 
-## 🏛️ 2. The Dual-Track Architecture
+## ️ 2. The Dual-Track Architecture
 
 ```mermaid
 graph TD
@@ -98,7 +98,7 @@ graph TD
 
 ---
 
-## 🚀 3. Quickstart & Model Inference (Python)
+##  3. Quickstart & Model Inference (Python)
 
 You can load and query **MedOrqis-LLM** directly via Hugging Face `transformers` and `peft`:
 
@@ -148,7 +148,7 @@ vllm serve Applied-Innovation-Center/Karnak-6B-v1.0 \
 
 ---
 
-## 🧮 4. Integrated Clinical Tools & Deterministic Calculators
+##  4. Integrated Clinical Tools & Deterministic Calculators
 
 MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions:
 
@@ -169,7 +169,7 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## 📊 5. Training Datasets & Governance
+##  5. Training Datasets & Governance
 
 - **Instruction Dataset**: [`seotarek/medorqis-clinical-instructions`](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
 - **Dialect Benchmark Dataset**: [`seotarek/medorqis-clinical-dialect-benchmark`](https://huggingface.co/datasets/seotarek/medorqis-clinical-dialect-benchmark)
@@ -177,13 +177,13 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## 🛡️ 6. Clinical Safety & Medical Disclaimer
+## ️ 6. Clinical Safety & Medical Disclaimer
 
 > **IMPORTANT MEDICAL NOTICE**: **MedOrqis-LLM** is an experimental clinical decision-support research tool. It is **not** an autonomous medical device and must never substitute for the clinical evaluation, diagnosis, or treatment decisions of a qualified and licensed human healthcare professional. Clinicians must independently verify all algorithmic recommendations.
 
 ---
 
-## 📜 7. License & Citation
+##  7. License & Citation
 
 Licensed under **Apache 2.0**.
 
