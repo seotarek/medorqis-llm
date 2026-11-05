@@ -28,7 +28,7 @@ from peft import PeftModel
 
 HF_TOKEN = "".join(["hf_", "FOEwmPyJISOLLVSFfIDHoOgoDnjGRpTAmU"])
 BASE_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
-LORA_REPO = "seotarek/medorqis-llm"
+LORA_REPO = "medorqis-llm-lora-final" if os.path.exists("medorqis-llm-lora-final") else "seotarek/medorqis-llm"
 EVAL_DATASET_PATH = "benchmarks/eval_dataset.jsonl"
 OUTPUT_JSON = "benchmarks/benchmark_results.json"
 OUTPUT_MD = "benchmarks/BENCHMARK_REPORT.md"
@@ -36,15 +36,29 @@ OUTPUT_MD = "benchmarks/BENCHMARK_REPORT.md"
 SYSTEM_PROMPT = """You are MedOrqis Clinical AI, an expert bilingual clinical decision intelligence system.
 CRITICAL RULE: Never calculate mathematical clinical risk scores, drug dosages, or drug-drug interactions using probabilistic guessing. Always invoke MedOrqis deterministic tools for calculation and safety guardrails."""
 
+EMBEDDED_EVAL_CASES = [
+    {"id": "eval-nephro-001", "prompt": "Evaluate renal function for a 62-year-old male with serum creatinine 2.1 mg/dL using race-free CKD-EPI 2021.", "expected_calculator": "ckd_epi_2021_egfr", "ground_truth_params": {"serum_creatinine_mg_dl": 2.1, "age_years": 62, "sex": "male"}, "ground_truth_math_result": 33.7, "category": "nephrology"},
+    {"id": "eval-cardio-002", "prompt": "74yo female with non-valvular atrial fibrillation, hypertension, and prior TIA. Calculate ESC 2024 CHA2DS2-VA stroke risk score.", "expected_calculator": "cha2ds2_va_esc2024", "ground_truth_params": {"age_years": 74, "hx_hypertension": True, "hx_stroke_tia_thromboembolism": True}, "ground_truth_math_result": 4, "category": "cardiology"},
+    {"id": "eval-peds-003", "prompt": "Calculate safe pediatric amoxicillin dose for a 4-year-old child weighing 16 kg with acute otitis media (dose: 90 mg/kg/day divided BID, adult max single dose 1000 mg).", "expected_calculator": "calculate_pediatric_weight_dose", "ground_truth_params": {"age_years": 4, "weight_kg": 16, "dose_per_kg": 90, "max_single_adult_dose_mg": 1000}, "ground_truth_math_result": 720.0, "category": "pediatrics"},
+    {"id": "eval-pulmo-004", "prompt": "An 85-year-old male with pneumonia has confusion, RR 32/min, BP 88/54 mmHg, and BUN 28 mg/dL. Calculate CURB-65 score.", "expected_calculator": "curb65_score", "ground_truth_params": {"confusion": True, "respiratory_rate": 32, "systolic_bp": 88, "blood_urea_nitrogen_mg_dl": 28, "age_years": 85}, "ground_truth_math_result": 5, "category": "pulmonology"},
+    {"id": "eval-pharm-005", "prompt": "Patient taking chronic warfarin for mechanical valve is prescribed oral metronidazole for anaerobic infection. Screen for interaction.", "expected_calculator": "check_drug_interactions", "ground_truth_params": {"medications": ["Warfarin", "Metronidazole"]}, "ground_truth_math_result": "MAJOR_BLEEDING_RISK", "category": "pharmacology"},
+    {"id": "eval-er-006", "prompt": "Patient with sudden severe shortness of breath, acute calf pain and unilateral leg swelling, heart rate 108 bpm. Previous PE 2 years ago. Calculate Wells PE score.", "expected_calculator": "wells_pe_score", "ground_truth_params": {"heart_rate": 108, "previous_pe_dvt": True, "symptoms_dvt": True}, "ground_truth_math_result": 7.5, "category": "emergency"},
+    {"id": "eval-peds-overdose-007", "prompt": "Child age 10 weighing 45 kg needs oral ibuprofen for severe fever (dose 10 mg/kg, max adult single dose 400 mg). Calculate safe single dose.", "expected_calculator": "calculate_pediatric_weight_dose", "ground_truth_params": {"age_years": 10, "weight_kg": 45, "dose_per_kg": 10, "max_single_adult_dose_mg": 400}, "ground_truth_math_result": 400.0, "category": "pediatrics"},
+    {"id": "eval-redflag-008", "prompt": "Patient developed sudden facial swelling, stridor, and widespread urticaria 5 minutes after receiving IV ampicillin. Provide emergency action.", "expected_calculator": "check_red_flags", "ground_truth_params": {"findings": ["facial swelling", "stridor", "urticaria"]}, "ground_truth_math_result": "ANAPHYLAXIS_IMMEDIATE_EPINEPHRINE", "category": "emergency"},
+    {"id": "eval-dialect-009", "prompt": "مريض مصري بيقول: 'عندي وجع بيحرق في صدري من إمبارح، وبحس بدقات قلبي سريعة لما أتحرك، وباخد كونكور وبلافيكس'. ترجم ونظم الشكوى.", "expected_calculator": "normalize_terminology", "ground_truth_params": {"query": "وجع بيحرق في صدري دقات قلبي سريعة كونكور بلافيكس"}, "ground_truth_math_result": "ANGINA_PALPITATIONS_BISOPROLOL_CLOPIDOGREL", "category": "dialectal"},
+    {"id": "eval-crcl-010", "prompt": "Calculate Cockcroft-Gault CrCl for an 80yo female weighing 50 kg with serum creatinine 1.5 mg/dL.", "expected_calculator": "cockcroft_gault_crcl", "ground_truth_params": {"age_years": 80, "weight_kg": 50, "serum_creatinine_mg_dl": 1.5, "sex": "female"}, "ground_truth_math_result": 23.6, "category": "pharmacology"}
+]
+
 def load_eval_data():
-    if not os.path.exists(EVAL_DATASET_PATH):
-        raise FileNotFoundError(f"Evaluation dataset not found at {EVAL_DATASET_PATH}")
-    cases = []
-    with open(EVAL_DATASET_PATH, "r", encoding="utf-8") as f:
-        for line in f:
-            if line.strip():
-                cases.append(json.loads(line))
-    return cases
+    if os.path.exists(EVAL_DATASET_PATH):
+        cases = []
+        with open(EVAL_DATASET_PATH, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    cases.append(json.loads(line))
+        return cases
+    print(f"Notice: {EVAL_DATASET_PATH} not found locally, using embedded 10 clinical benchmark scenarios.")
+    return EMBEDDED_EVAL_CASES
 
 def evaluate_response(response_text: str, case: dict, is_lora: bool):
     expected_tool = case["expected_calculator"]
@@ -223,7 +237,7 @@ def main():
 ## 🔍 2. Qualitative Clinical Analysis (Zero Flattery)
 
 1. **Why Base Model Fails at Arithmetic**:
-   Standard autoregressive models (including Karnak-6B, Llama-3, and GPT-4) generate text token-by-token using probabilistic next-token prediction. When tasked with exponential formulas like **CKD-EPI 2021** ($\text{eGFR} = 141 \times \min(\text{SCr}/\kappa, 1)^\alpha \times \dots$), base models guess numbers that "sound plausible" but deviate by 15-40%, introducing severe diagnostic and dosing risks.
+   Standard autoregressive models (including Karnak-6B, Llama-3, and GPT-4) generate text token-by-token using probabilistic next-token prediction. When tasked with exponential formulas like **CKD-EPI 2021** ($\text{eGFR} = 141 \times \\min(\text{SCr}/\\kappa, 1)^\\alpha \\times \\dots$), base models guess numbers that "sound plausible" but deviate by 15-40%, introducing severe diagnostic and dosing risks.
 
 2. **The MedOrqis Zero-Token Determinism Advantage**:
    MedOrqis-LLM does not attempt to calculate complex exponents or physiological equations in weights. Instead, it emits a zero-error `<tool_call>` with the extracted parameters. The calculation is executed deterministically with **0.00% arithmetic error**.
@@ -236,11 +250,9 @@ def main():
         
     print(f"\n[PHASE 4/4] Benchmark completed! Saved results to {OUTPUT_JSON} and {OUTPUT_MD}")
     print("=" * 70)
-    print("SUMMARY RESULTS:")
-    print(f"Tool Calling Syntax:  Base {base_tool_tag_rate:.1f}%  -> MedOrqis {medorqis_tool_tag_rate:.1f}%")
-    print(f"Calculator Routing:   Base {base_tool_routing_acc:.1f}%  -> MedOrqis {medorqis_tool_routing_acc:.1f}%")
-    print(f"Math Error Rate:      Base {base_math_error_rate:.1f}% -> MedOrqis {medorqis_math_error_rate:.1f}%")
-    print("=" * 70)
+    print("---BEGIN_BENCHMARK_JSON---")
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+    print("---END_BENCHMARK_JSON---")
 
 if __name__ == "__main__":
     main()
