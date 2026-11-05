@@ -75,30 +75,32 @@
 <body class="selection:bg-cyan-500/20 selection:text-cyan-200">
 
   <!-- Top Technical Masthead -->
-  <header class="border-b border-surface-border bg-surface-root/95 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-6">
-        <a href="#" class="flex items-center gap-3">
-          <span class="w-2.5 h-2.5 bg-clinical-cyan inline-block"></span>
-          <span class="font-mono text-sm tracking-wider font-semibold text-white uppercase">MedOrqis<span class="text-clinical-cyan">/LLM</span></span>
-          <span class="font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 bg-surface-subtle border border-surface-border text-slate-400">Arch: Qwen3-6B</span>
-          <span class="hidden sm:inline-block font-mono text-[10px] uppercase tracking-widest px-2 py-0.5 bg-clinical-cyan/10 border border-clinical-cyan/30 text-clinical-cyan">Release v1.0.0</span>
-        </a>
-        <nav class="hidden lg:flex items-center gap-6 font-mono text-xs text-slate-400">
-          <a href="#comparison-matrix" class="hover:text-white transition">Model Matrix</a>
-          <a href="#case-differential" class="hover:text-white transition">4-Way Case Bench</a>
-          <a href="#dialect-bench" class="hover:text-white transition">Arabic Dialects</a>
-          <a href="#architecture" class="hover:text-white transition">Dual-Track Engine</a>
-          <a href="#deployment" class="hover:text-white transition">vLLM Inference</a>
-        </nav>
-      </div>
+  <header class="border-b border-surface-border bg-surface-root/90 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <!-- Clean, Confident Brandmark without Clutter Badges -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <span class="w-2 h-2 rounded-full bg-clinical-cyan group-hover:scale-125 transition-transform duration-200"></span>
+        <span class="font-mono text-sm tracking-tight font-bold text-white">MedOrqis<span class="text-slate-500 font-normal">/</span><span class="text-clinical-cyan font-semibold">LLM</span></span>
+      </a>
 
-      <div class="flex items-center gap-3 font-mono text-xs">
-        <a href="https://huggingface.co/seotarek/medorqis-llm" target="_blank" class="px-3 py-1.5 border border-surface-border hover:border-slate-500 bg-surface-card text-slate-200 transition">
-          HF Model
+      <!-- Spacious, Centered Editorial Navigation -->
+      <nav class="hidden md:flex items-center gap-8 font-mono text-xs text-slate-400">
+        <a href="#comparison-matrix" class="hover:text-white transition-colors duration-150">Model Matrix</a>
+        <a href="#case-differential" class="hover:text-white transition-colors duration-150">Case Inspector</a>
+        <a href="#dialect-bench" class="hover:text-white transition-colors duration-150">Arabic Dialects</a>
+        <a href="#architecture" class="hover:text-white transition-colors duration-150">Architecture</a>
+        <a href="#deployment" class="hover:text-white transition-colors duration-150">Inference</a>
+      </nav>
+
+      <!-- Restrained, Premium Actions -->
+      <div class="flex items-center gap-5 font-mono text-xs">
+        <a href="https://huggingface.co/seotarek/medorqis-llm" target="_blank" class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5">
+          <span>Hugging Face</span>
+          <span class="text-[10px] text-slate-600">-></span>
         </a>
-        <a href="https://github.com/seotarek/medorqis-llm/releases" target="_blank" class="px-3.5 py-1.5 bg-clinical-cyan hover:bg-cyan-400 text-surface-root font-bold transition">
-          Release v1.0.0
+        <a href="https://github.com/seotarek/medorqis-llm/releases" target="_blank" class="px-3 py-1.5 border border-surface-border hover:border-slate-500 bg-surface-card hover:bg-surface-elevated text-slate-200 transition flex items-center gap-2">
+          <span>GitHub</span>
+          <span class="text-[10px] text-clinical-cyan font-semibold">v1.0.0</span>
         </a>
       </div>
     </div>
