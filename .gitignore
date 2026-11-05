@@ -15,3 +15,4 @@ medorqis_lora_checkpoints/
 medorqis_karnak6b_checkpoints/
 .ipynb_checkpoints/
 *.log
+hf_space/
