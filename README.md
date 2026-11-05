@@ -22,18 +22,20 @@ Qwen Architecture (Alibaba)
   └── Karnak-6B-v1.0 (Applied Innovation Center / Bilingual Arabic-English Pretraining)
         └── MedOrqis-LLM (Clinical Decision SFT & Deterministic Tool-Calling QLoRA Adapter)
 ```
-> ℹ️ **Model Scale Clarification**:  
+> [!NOTE]
+> **Model Scale Clarification**:  
 > `MedOrqis-LLM v1.0` is the lightweight **6B parameter** clinical model designed for edge deployment, commodity GPUs (e.g. single NVIDIA T4/L4 at ~3.8 GB VRAM), and cost-efficient clinical decision support. The enterprise **Karnak-40B MoE** architecture is reserved for multi-GPU institutional server deployments.
 
 Unlike generic conversational models that frequently hallucinate critical drug dosages or risk calculations, MedOrqis-LLM is explicitly fine-tuned under strict clinical governance: **whenever an inquiry involves arithmetic risk scoring, renal clearance, pediatric weight-based dosing, or severe drug interactions, the model refuses to guess probabilistically and instead emits a native `<tool_call>` targeting verified deterministic clinical calculators**.
 
->  **Looking for Clinical Skills & MCP Server Only?**:  
+> [!TIP]
+> **Looking for Clinical Skills & MCP Server Only?**:  
 > If you already use an external LLM (Claude 3.5 Sonnet, GPT-4o, Gemini) and only need the 24 specialized clinical skills, 12 zero-token calculators, and MCP server, visit our partner repository:  
->  **[seotarek/MedOrqis — Medical AI Skills Ecosystem](https://github.com/seotarek/MedOrqis)**
+> **[seotarek/MedOrqis — Medical AI Skills Ecosystem](https://github.com/seotarek/MedOrqis)**
 
 ---
 
-## ️ 2. The Dual-Track Architecture
+## 2. The Dual-Track Architecture
 
 ```mermaid
 graph TD
@@ -159,7 +161,7 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## ️ 7. Clinical Safety & Medical Disclaimer
+## 7. Clinical Safety & Medical Disclaimer
 
 > **IMPORTANT MEDICAL NOTICE**: **MedOrqis-LLM** is an experimental clinical decision-support research tool. It is **not** an autonomous medical device and must never substitute for the clinical evaluation, diagnosis, or treatment decisions of a qualified and licensed human healthcare professional. Clinicians must independently verify all algorithmic recommendations.
 
