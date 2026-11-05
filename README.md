@@ -4,6 +4,7 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Base Model](https://img.shields.io/badge/Base_Model-Karnak--6B--v1.0-emerald.svg)](https://huggingface.co/Applied-Innovation-Center/Karnak-6B-v1.0)
 [![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Model-seotarek%2Fmedorqis--llm-yellow.svg)](https://huggingface.co/seotarek/medorqis-llm)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Space-Interactive%20Clinical%20Bench-blue.svg)](https://huggingface.co/spaces/seotarek/medorqis-llm-demo)
 [![Hugging Face Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Dataset-Clinical--Instructions-orange.svg)](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
 [![Live Showcase](https://img.shields.io/badge/%F0%9F%8C%90%20GitHub%20Pages-Live%20Showcase-teal.svg)](https://seotarek.github.io/medorqis-llm/)
 [![Partner Skills Ecosystem](https://img.shields.io/badge/Partner_Ecosystem-MedOrqis_24_Skills-6366f1.svg)](https://github.com/seotarek/MedOrqis)
