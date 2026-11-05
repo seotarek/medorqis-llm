@@ -67,10 +67,62 @@ peft_config = LoraConfig(
 model = get_peft_model(model, peft_config)
 model.print_trainable_parameters()
 
+from typing import Optional, List
+
 # 4. Load & Tokenize Dataset
 print(f"\n[Step 4/6] Pulling Clinical Instruction Dataset ({DATASET_ID})...")
 raw_dataset = load_dataset(DATASET_ID, split="train", token=HF_TOKEN)
 print(f"Loaded {len(raw_dataset)} clinical tool-calling scenarios.")
+
+def mask_labels_for_assistant(text: str, input_ids: list, offsets: Optional[list] = None, tokenizer=None) -> list:
+    """
+    Masks all non-assistant tokens with -100 so gradient descent only optimizes
+    assistant-generated turns (rationale, tool calls, and clinical summaries).
+    """
+    labels = [-100] * len(input_ids)
+    assistant_header = "<|im_start|>assistant\n"
+    end_tag = "<|im_end|>"
+    
+    # Identify character spans for assistant turns
+    spans = []
+    idx = 0
+    while True:
+        start = text.find(assistant_header, idx)
+        if start == -1:
+            break
+        content_start = start + len(assistant_header)
+        end = text.find(end_tag, content_start)
+        if end == -1:
+            spans.append((content_start, len(text)))
+            break
+        spans.append((content_start, end + len(end_tag)))
+        idx = end + len(end_tag)
+        
+    if offsets:
+        for i, (tok_start, tok_end) in enumerate(offsets):
+            if tok_start == tok_end:
+                continue
+            for s_start, s_end in spans:
+                if tok_start >= s_start and tok_end <= s_end:
+                    labels[i] = input_ids[i]
+                    break
+        return labels
+
+    # Fallback token decoding scanner if offset mapping unavailable
+    if tokenizer:
+        in_assistant = False
+        for i, tid in enumerate(input_ids):
+            tok_str = tokenizer.decode([tid], skip_special_tokens=False)
+            if "<|im_start|>assistant" in tok_str or tok_str == "assistant\n":
+                in_assistant = True
+                continue
+            if in_assistant:
+                labels[i] = tid
+                if "<|im_end|>" in tok_str:
+                    in_assistant = False
+        return labels
+
+    return labels
 
 def preprocess_function(example):
     messages = example.get("messages", [])
@@ -89,13 +141,27 @@ def preprocess_function(example):
             add_generation_prompt=False
         )
     
-    tokenized = tokenizer(
-        text,
-        truncation=True,
-        max_length=1536,
-        padding=False
+    try:
+        tokenized = tokenizer(
+            text,
+            truncation=True,
+            max_length=1536,
+            padding=False,
+            return_offsets_mapping=True
+        )
+        offsets = tokenized.pop("offset_mapping", None)
+    except Exception:
+        tokenized = tokenizer(
+            text,
+            truncation=True,
+            max_length=1536,
+            padding=False
+        )
+        offsets = None
+        
+    tokenized["labels"] = mask_labels_for_assistant(
+        text, tokenized["input_ids"], offsets=offsets, tokenizer=tokenizer
     )
-    tokenized["labels"] = list(tokenized["input_ids"])
     return tokenized
 
 tokenized_dataset = raw_dataset.map(
