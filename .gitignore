@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+*.pt
+*.bin
+*.safetensors
+*.pth
+checkpoints/
+medorqis_lora_checkpoints/
+medorqis_karnak6b_checkpoints/
+.ipynb_checkpoints/
+*.log
