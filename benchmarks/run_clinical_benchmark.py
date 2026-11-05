@@ -31,7 +31,13 @@ from peft import PeftModel
 HF_TOKEN = "".join(["hf_", "FOEwmPyJISOLLVSFfIDHoOgoDnjGRpTAmU"])
 BASE_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
 LORA_REPO = "medorqis-llm-lora-final" if os.path.exists("medorqis-llm-lora-final") else "seotarek/medorqis-llm"
-EVAL_DATASET_PATH = "benchmarks/eval_dataset.jsonl"
+if os.path.exists("benchmarks/eval_dataset.jsonl"):
+    EVAL_DATASET_PATH = "benchmarks/eval_dataset.jsonl"
+elif os.path.exists("eval_dataset.jsonl"):
+    EVAL_DATASET_PATH = "eval_dataset.jsonl"
+else:
+    EVAL_DATASET_PATH = "benchmarks/eval_dataset.jsonl"
+
 OUTPUT_JSON = "benchmarks/benchmark_results.json"
 OUTPUT_MD = "benchmarks/BENCHMARK_REPORT.md"
 

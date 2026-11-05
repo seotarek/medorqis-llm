@@ -71,7 +71,15 @@ from typing import Optional, List
 
 # 4. Load & Tokenize Dataset
 print(f"\n[Step 4/6] Pulling Clinical Instruction Dataset ({DATASET_ID})...")
-raw_dataset = load_dataset(DATASET_ID, split="train", token=HF_TOKEN)
+if os.path.exists("medorqis_clinical_instructions.jsonl"):
+    raw_dataset = load_dataset("json", data_files="medorqis_clinical_instructions.jsonl", split="train")
+elif os.path.exists("training/medorqis_clinical_instructions.jsonl"):
+    raw_dataset = load_dataset("json", data_files="training/medorqis_clinical_instructions.jsonl", split="train")
+else:
+    try:
+        raw_dataset = load_dataset(DATASET_ID, data_files="train.jsonl", split="train", token=HF_TOKEN)
+    except Exception:
+        raw_dataset = load_dataset("json", data_files="https://raw.githubusercontent.com/seotarek/medorqis-llm/main/training/medorqis_clinical_instructions.jsonl", split="train")
 print(f"Loaded {len(raw_dataset)} clinical tool-calling scenarios.")
 
 def mask_labels_for_assistant(text: str, input_ids: list, offsets: Optional[list] = None, tokenizer=None) -> list:

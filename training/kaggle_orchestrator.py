@@ -91,9 +91,11 @@ subprocess.run(["nvidia-smi"])
 cmd = "pip install -q transformers peft bitsandbytes datasets accelerate huggingface_hub"
 subprocess.run(cmd, shell=True, check=True)
 
-print("=== Downloading latest training & benchmark scripts ===")
+print("=== Downloading latest training & benchmark scripts & datasets ===")
 subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/training/train_medorqis_cloud.py", "-o", "train.py"], check=True)
 subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/benchmarks/run_clinical_benchmark.py", "-o", "bench.py"], check=True)
+subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/training/medorqis_clinical_instructions.jsonl", "-o", "medorqis_clinical_instructions.jsonl"], check=True)
+subprocess.run(["curl", "-s", "-L", "https://raw.githubusercontent.com/seotarek/medorqis-llm/main/benchmarks/eval_dataset.jsonl", "-o", "eval_dataset.jsonl"], check=True)
 
 print("=== Executing Train ===")
 subprocess.run(["python3", "train.py"], check=True)
