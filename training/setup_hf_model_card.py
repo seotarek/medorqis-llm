@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Sets up the official Hugging Face Model Repository and uploads
-the complete, professional Model Card (README.md) for MedOrqis-Hakim-6B.
+the complete, professional Model Card (README.md) for MedOrqis-LLM.
 """
 
 import os
@@ -27,12 +27,12 @@ if not HF_TOKEN:
     print("[ERROR] HF_TOKEN is not set.")
     sys.exit(1)
 
-REPO_ID = "seotarek/medorqis-hakim-6b"
+REPO_ID = "seotarek/medorqis-llm"
 
 MODEL_CARD_CONTENT = """---
 language:
-- ar
 - en
+- ar
 license: apache-2.0
 base_model: Applied-Innovation-Center/Karnak-6B-v1.0
 tags:
@@ -53,19 +53,19 @@ datasets:
 - seotarek/medorqis-clinical-instructions
 - seotarek/medorqis-clinical-dialect-benchmark
 model-index:
-- name: MedOrqis-Hakim-6B
+- name: MedOrqis-LLM
   results: []
 ---
 
 <div align="center">
 
-# 🩺 MedOrqis-Hakim-6B (حكيم)
-### Bilingual Medical Foundation Model & Deterministic Clinical Tool-Calling Brain
-#### النموذج الطبي الذكي ثنائي اللغة الموجه بالمعايير السريرية العالمية والحسابات الحتمية
+# 🩺 MedOrqis-LLM
+### Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Base Model](https://img.shields.io/badge/Base_Model-Karnak--6B--v1.0-emerald.svg)](https://huggingface.co/Applied-Innovation-Center/Karnak-6B-v1.0)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/seotarek/MedOrqis/blob/main/training/MedOrqis_Free_Training_Colab.ipynb)
+[![GitHub](https://img.shields.io/badge/GitHub-seotarek%2Fmedorqis--llm-black.svg?logo=github)](https://github.com/seotarek/medorqis-llm)
+[![Partner Ecosystem](https://img.shields.io/badge/Skills_Ecosystem-MedOrqis-6366f1.svg)](https://github.com/seotarek/MedOrqis)
 [![Dataset](https://img.shields.io/badge/Dataset-MedOrqis--Clinical--Instructions-orange.svg)](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
 [![M8ven Verified](https://img.shields.io/badge/M8ven_Trust-Grade_B_(89%2F100)-green.svg)](https://m8ven.ai/mcp/seotarek-medorqis-uxezzz?s=readme)
 
@@ -73,79 +73,34 @@ model-index:
 
 ---
 
-## 📌 1. نبذة عن النموذج (Model Overview)
+## 📌 1. Model Overview
 
-**MedOrqis-Hakim-6B (حكيم)** هو نموذج لغوي طبي سريري متخصص ثنائي اللغة (العربية والإنجليزية)، تم تطويره كنواة عصبية ذكية (Clinical Brain) مكملة لمنظومة مهارات **MedOrqis**. النموذج مبني فوق الأساس الطبي العربي **Karnak-6B-v1.0** (من معمارية Qwen3) ومدرب بتقنية **QLoRA** على مجموعات بيانات سريرية واقعية.
+**MedOrqis-LLM** is an open-weights, bilingual (Arabic & English) clinical decision-intelligence foundation model. Fine-tuned on top of **`Applied-Innovation-Center/Karnak-6B-v1.0`** (Qwen3 architecture) via **QLoRA 4-bit NF4**, it acts as the primary **Clinical Brain** of the MedOrqis ecosystem.
 
-### 💡 لماذا سُمي "حكيم" (Hakim)؟
-في التراث الطبي العربي، "الحكيم" ليس مجرد ناقل للمعرفة، بل هو الطبيب الفيلسوف الذي يجمع بين عمق الفحص السريري، وحسن الاستماع للمريض، والالتزام بأعلى معايير الأمانة والسلامة السريرية.
+Unlike generic conversational models that frequently hallucinate critical drug dosages or risk calculations, MedOrqis-LLM is explicitly fine-tuned under strict clinical governance: **whenever an inquiry involves arithmetic risk scoring, renal clearance, pediatric weight-based dosing, or severe drug interactions, the model refuses to guess probabilistically and instead emits a native `<tool_call>` targeting verified deterministic clinical calculators**.
 
 ---
 
-## 🏛️ 2. الهيكلية ثنائية المسار (The Dual-Track Architecture)
-
-يعتمد **MedOrqis** على فصل جوهري صارم بين مسارين لمنع الهلوسة الطبية:
+## 🏛️ 2. The Dual-Track Architecture
 
 ```mermaid
 graph TD
-    User["المريض / الطبيب (Clinical Narrative / Complaint)"] --> Brain["المسار الأول: MedOrqis-Hakim Brain<br/>(Clinical Reasoning & Syntactic Understanding)"]
-    Brain --> Decision{"هل تحتاج الحالة<br/>لحسابات أو قواعد أمان؟"}
-    Decision -- "نعم (Math/Risk/Dosing/DDI)" --> ToolCall["استدعاء تلقائي للأداة الحتمية<br/>&lt;tool_call&gt;"]
-    ToolCall --> MCP["المسار الثاني: محرك مهارات MedOrqis<br/>(Deterministic MCP Calculators & Guardrails)"]
-    MCP --> Result["ناتج حسابي دقيق 100% بدون هلوسة"]
-    Result --> Synthesis["صياغة التوصية الطبية السريرية المعتمدة<br/>(ESC 2024 / KDIGO / NICE)"]
-    Decision -- "لا (تحليل سردي فقط)" --> Direct["تحليل سريري موجه"]
-    Synthesis --> Output["التقرير الطبي النهائي الموثق"]
-    Direct --> Output
-```
-
-1. **المسار الأول (The Brain)**: نموذج **MedOrqis-Hakim** الذي يفهم الشكوى السريرية، ويترجم اللهجات العامية (مثل: المصرية والخليجية) إلى تشخيصات معيارية (ICD-10 / SNOMED-CT).
-2. **المسار الثاني (The Deterministic Engine)**: محرك أدوات MedOrqis الذي ينفذ العمليات الحسابية وقواعد الأمان الحرجة عبر **معادلات برمجية حتمية (Zero-Token Deterministic Equations)** خالية تماماً من الهلوسة الاحتمالية.
-
----
-
-## 🧮 3. الأدوات والحاسبات السريرية الحتمية المدعومة (Deterministic Tools)
-
-تم تدريب النموذج على توليد استدعاءات برمجية مباشرة عبر وسوم ChatML `<tool_call>` للأدوات التالية:
-
-| اسم الأداة الحسابية | المرجع العلمي المعتمد | الوظيفة السريرية |
-| :--- | :--- | :--- |
-| **`cha2ds2_va_esc2024`** | ESC 2024 AF Guidelines | تقييم خطورة الجلطات لمرضى الرجفان الأذيني (بعد استبعاد عامل الجنس البيولوجي). |
-| **`ckd_epi_2021_egfr`** | KDIGO 2024 / NKF-ASN | حساب معدل الترشيح الكبيبي الكلوي بالمعادلة المعتمدة الخالية من العرق. |
-| **`bedside_schwartz_egfr`** | KDIGO Pediatric | حساب كفاءة وظائف الكلى للأطفال دون سن 18 عاماً. |
-| **`cockcroft_gault_crcl`** | FDA Renal Dosing | حساب تصفية الكرياتينين لتعديل جرعات الأدوية كلوياً. |
-| **`curb65_score`** | BTS Guidelines | تقييم شدة الالتهاب الرئوي وتحديد معايير القبول بالعناية المركزة. |
-| **`wells_pe_score`** | Wells Criteria | تحديد احتمالية الإصابة بالانصمام الرئوي (PE) وتوجيه الفحوصات الإشعاعية. |
-| **`has_bled_score`** | Chest Guidelines | تقييم خطورة النزيف لمرضى مضادات التخثر. |
-| **`pediatric_weight_dose`** | AAP Guidelines | حساب جرعات الأطفال الدوائية حسب الوزن بدقة مع سقف جرعة البالغين (Zero Overdose). |
-| **`check_drug_interactions`** | MedOrqis DDI Engine | رصد التداخلات الدوائية القاتلة والتعارضات بين الأدوية. |
-| **`check_red_flags`** | Emergency Protocols | التقاط العلامات الحمراء الحادة (مثل: متلازمة ذنب الفرس، الصدمة، الذبحة الصدرية). |
-| **`scrub_phi`** | HIPAA Safe Harbor | التطهير الآلي لبيانات المرضى الشخصية والأرقام القومية والهواتف. |
-
----
-
-## 💬 4. أمثلة الاستخدام وتوليد استدعاء الأدوات (Prompt & Tool-Calling)
-
-### سيناريو سريري باللغة العربية (Cardiology Case):
-
-```json
-{
-  "role": "user",
-  "content": "مريض عمره 68 سنة يعاني من رجفان أذيني غير صمام، ولديه ارتفاع ضغط دم وتصلب شرايين محيطية. كيف نقيم خطورة الجلطات وفق ESC 2024؟"
-}
-```
-
-### استجابة النموذج (MedOrqis-Hakim Model Output):
-
-```xml
-<tool_call>
-{"name": "calculate_clinical_score", "arguments": {"calculator_id": "cha2ds2_va_esc2024", "parameters": {"age_years": 68, "hx_hypertension": true, "hx_diabetes": false, "hx_stroke_tia_thromboembolism": false, "hx_vascular_disease": true, "hx_heart_failure": false}}}
-</tool_call>
+    User["Clinician / Patient Inquiry (English / Arabic / Regional Dialect)"] --> LLM["MedOrqis-LLM Clinical Brain<br/>(Narrative Comprehension & Clinical Reasoning)"]
+    LLM --> Decision{"Requires Staging, Math,<br/>Dosing, or Safety Check?"}
+    Decision -- "Yes (Math/Scoring/DDI)" --> ToolCall["Emits Structured Function Call<br/>&lt;tool_call&gt;"]
+    ToolCall --> DeterministicEngine["MedOrqis Deterministic Tools<br/>(12 Zero-Token Guideline Calculators)"]
+    DeterministicEngine --> Result["100% Deterministic Mathematical Output<br/>(ESC 2024 / KDIGO / BTS)"]
+    Result --> Synthesis["Evidence-Grounded Clinical Recommendation"]
+    Decision -- "No (Pure Narrative Analysis)" --> Direct["Evidence-Based Narrative Synthesis"]
+    Synthesis --> FinalOutput["Final Audited Clinical Report"]
+    Direct --> FinalOutput
 ```
 
 ---
 
-## 🚀 5. كيفية تشغيل واستخدام النموذج برمجياً (Quickstart with Python)
+## 🚀 3. Quickstart & Model Inference (Python)
+
+You can load and query **MedOrqis-LLM** directly via Hugging Face `transformers` and `peft`:
 
 ```python
 import torch
@@ -153,12 +108,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
 base_model_id = "Applied-Innovation-Center/Karnak-6B-v1.0"
-lora_model_id = "seotarek/medorqis-hakim-6b"
+lora_model_id = "seotarek/medorqis-llm"
 
-# 1. تحميل الـ Tokenizer
+# 1. Load Tokenizer
 tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
 
-# 2. تحميل النموذج الأساسي بضغط 4-bit
+# 2. Load Base Model in 4-bit NF4 Precision
 base_model = AutoModelForCausalLM.from_pretrained(
     base_model_id,
     load_in_4bit=True,
@@ -167,42 +122,78 @@ base_model = AutoModelForCausalLM.from_pretrained(
     trust_remote_code=True
 )
 
-# 3. دمج محولات الحكيم (Hakim LoRA Adapters)
+# 3. Mount MedOrqis-LLM LoRA Adapters
 model = PeftModel.from_pretrained(base_model, lora_model_id)
 model.eval()
 
-# 4. استعلام سريري
-prompt = "Patient with acute retrosternal chest pain and diaphoresis. Analyze symptoms."
+# 4. Clinical Query (e.g., Cardiology Case)
+prompt = "A 68-year-old male with newly diagnosed non-valvular atrial fibrillation, hypertension, and peripheral vascular disease. Evaluate thromboembolic stroke risk according to 2024 ESC guidelines."
 inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+
 with torch.no_grad():
     outputs = model.generate(**inputs, max_new_tokens=512, temperature=0.2)
+
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+### High-Throughput Production Serving with vLLM
+
+```bash
+vllm serve Applied-Innovation-Center/Karnak-6B-v1.0 \
+    --enable-lora \
+    --lora-modules medorqis-llm=seotarek/medorqis-llm \
+    --max-model-len 4096 \
+    --gpu-memory-utilization 0.90
 ```
 
 ---
 
-## 📊 6. بيانات التدريب والتقييم (Datasets & Benchmarks)
+## 🧮 4. Integrated Clinical Tools & Deterministic Calculators
 
-- **بيانات التعليمات السريرية**: [`seotarek/medorqis-clinical-instructions`](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
-- **بيانات معالجة اللهجات الإقليمية**: [`seotarek/medorqis-clinical-dialect-benchmark`](https://huggingface.co/datasets/seotarek/medorqis-clinical-dialect-benchmark)
+MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions:
+
+| Clinical Domain | Deterministic Tool | Scientific Standard | Clinical Objective |
+| :--- | :--- | :--- | :--- |
+| **Cardiology** | `cha2ds2_va_esc2024` | 2024 ESC Guidelines | Sex-neutral stroke risk stratification in Atrial Fibrillation. |
+| **Nephrology** | `ckd_epi_2021_egfr` | KDIGO 2024 / NKF-ASN | Race-free adult eGFR staging and drug dosing adjustment. |
+| **Pediatrics** | `bedside_schwartz_egfr` | KDIGO Pediatric | Height-based pediatric eGFR calculation ($k \times \text{Ht}/\text{SCr}$). |
+| **Pharmacology** | `cockcroft_gault_crcl` | FDA Renal Dosing | Creatinine clearance calculation with automatic ideal/adjusted weight gating. |
+| **Pulmonology** | `curb65_score` | BTS Guidelines | 30-day mortality risk and ICU admission criteria in pneumonia. |
+| **Emergency** | `wells_pe_score` | Wells Criteria | Pre-test probability of acute pulmonary embolism & CTPA triage. |
+| **Hematology** | `has_bled_score` | Chest 2010 | Major bleeding risk assessment in anticoagulated patients. |
+| **Pediatric Dosing** | `calculate_pediatric_weight_dose` | AAP Guidelines | Weight-based dose calculation with mandatory adult maximum dose ceiling. |
+| **Pharmacology** | `check_drug_interactions` | MedOrqis DDI Rules | Multi-drug pharmacokinetic interaction screening (e.g. Warfarin + NSAIDs). |
+| **Emergency Red Flags** | `check_red_flags` | Multi-Specialty Rules | Detection of sentinel acute emergencies (e.g. Cauda Equina Syndrome). |
+| **Privacy / HIPAA** | `scrub_phi` | HIPAA 18 Safe Harbor | Automated de-identification of national IDs, phone numbers, and names. |
+| **Dialect Translation** | `normalize_terminology` | SNOMED-CT / ICD-10 | Mapping colloquial complaints (Egyptian / Gulf dialects) to standardized concepts. |
 
 ---
 
-## 🛡️ 7. إخلاء المسؤولية الطبية والأمان (Clinical Safety Disclaimer)
+## 📊 5. Training Datasets & Governance
 
-> **تنبيه سريري هام**: نموذج **MedOrqis-Hakim** صُمم كنظام دعم قرار سريري تجريبي (Clinical Decision Support - CDS) لمساعدة الكوادر الطبية والباحثين. هذا النموذج لا يحل بأي حال من الأحوال محل الفحص الطبي المباشر بواسطة طبيب بشري مرخص ومؤهل. لا تتخذ أي قرار علاجي أو دوائي بناءً على مخرجات الذكاء الاصطناعي دون استشارة طبية متخصصة.
+- **Instruction Dataset**: [`seotarek/medorqis-clinical-instructions`](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
+- **Dialect Benchmark Dataset**: [`seotarek/medorqis-clinical-dialect-benchmark`](https://huggingface.co/datasets/seotarek/medorqis-clinical-dialect-benchmark)
+- **Zero Real Patient PHI**: 100% synthetically generated and grounded in peer-reviewed clinical guidelines.
 
 ---
 
-## 📜 8. التوثيق والاقتباس (Citation)
+## 🛡️ 6. Clinical Safety & Medical Disclaimer
+
+> **IMPORTANT MEDICAL NOTICE**: **MedOrqis-LLM** is an experimental clinical decision-support research tool. It is **not** an autonomous medical device and must never substitute for the clinical evaluation, diagnosis, or treatment decisions of a qualified and licensed human healthcare professional. Clinicians must independently verify all algorithmic recommendations.
+
+---
+
+## 📜 7. License & Citation
+
+Licensed under **Apache 2.0**.
 
 ```bibtex
-@misc{medorqis_hakim_2026,
+@misc{medorqis_llm_2026,
   author = {Tarek, SEO and The MedOrqis Engineering Team},
-  title = {MedOrqis-Hakim-6B: Bilingual Medical Foundation Model & Deterministic Tool-Calling Brain},
+  title = {MedOrqis-LLM: Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain},
   year = {2026},
-  publisher = {Hugging Face},
-  howpublished = {\\url{https://huggingface.co/seotarek/medorqis-hakim-6b}}
+  publisher = {GitHub & Hugging Face},
+  howpublished = {\\url{https://github.com/seotarek/medorqis-llm}}
 }
 ```
 """
@@ -220,7 +211,7 @@ def setup_repo():
         print(f"[NOTE] create_repo: {e}")
 
     # Write Model Card
-    card_path = "training/MODEL_CARD_HAKIM_6B.md"
+    card_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "training", "MODEL_CARD_MEDORQIS_LLM.md")
     with open(card_path, "w", encoding="utf-8") as f:
         f.write(MODEL_CARD_CONTENT)
 
