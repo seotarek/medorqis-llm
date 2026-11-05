@@ -34,7 +34,7 @@ model-index:
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Base Model](https://img.shields.io/badge/Base_Model-Karnak--6B--v1.0-emerald.svg)](https://huggingface.co/Applied-Innovation-Center/Karnak-6B-v1.0)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/seotarek/MedOrqis/blob/main/training/MedOrqis_Free_Training_Colab.ipynb)
+[![GitHub](https://img.shields.io/badge/GitHub-seotarek%2Fmedorqis--hakim-black.svg?logo=github)](https://github.com/seotarek/medorqis-hakim)
 [![Dataset](https://img.shields.io/badge/Dataset-MedOrqis--Clinical--Instructions-orange.svg)](https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions)
 [![M8ven Verified](https://img.shields.io/badge/M8ven_Trust-Grade_B_(89%2F100)-green.svg)](https://m8ven.ai/mcp/seotarek-medorqis-uxezzz?s=readme)
 
