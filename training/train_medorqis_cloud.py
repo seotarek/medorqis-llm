@@ -15,9 +15,10 @@ from transformers import (
     BitsAndBytesConfig,
     TrainingArguments,
     Trainer,
+    TrainerCallback,
     DataCollatorForSeq2Seq
 )
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, PeftModel
 
 HF_TOKEN = "".join(["hf_", "FOEwmPyJISOLLVSFfIDHoOgoDnjGRpTAmU"])
 BASE_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
@@ -54,8 +55,8 @@ model = AutoModelForCausalLM.from_pretrained(
 model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
 model.config.use_cache = False
 
-# 3. Add LoRA Adapters
-print("\n[Step 3/6] Configuring LoRA Adapters...")
+# 3. Add LoRA Adapters (Continual Learning: loads prior trained adapter from HF if available)
+print(f"\n[Step 3/6] Setting up LoRA Adapters for Continual Learning...")
 peft_config = LoraConfig(
     r=16,
     lora_alpha=32,
@@ -64,7 +65,24 @@ peft_config = LoraConfig(
     bias="none",
     task_type="CAUSAL_LM"
 )
-model = get_peft_model(model, peft_config)
+
+mounted_existing = False
+try:
+    print(f"Checking for existing trained weights on Hugging Face ({OUTPUT_REPO})...")
+    model = PeftModel.from_pretrained(
+        model,
+        OUTPUT_REPO,
+        is_trainable=True,
+        token=HF_TOKEN
+    )
+    print(f"[CONTINUAL LEARNING SUCCESS] Loaded existing adapter from {OUTPUT_REPO} to continue cumulative training!")
+    mounted_existing = True
+except Exception as e:
+    print(f"[NOTE] Could not mount existing adapter ({e}). Initializing fresh LoRA weights...")
+
+if not mounted_existing:
+    model = get_peft_model(model, peft_config)
+
 model.print_trainable_parameters()
 
 from typing import Optional, List
@@ -221,8 +239,32 @@ print(f"[TOKEN STATS] Total: {total_tokens:,} | Unmasked (Assistant/Loss): {unma
 if unmasked_tokens == 0:
     raise RuntimeError("CRITICAL ERROR: Unmasked token count is ZERO! Training loss would be 0.0000!")
 
+class EpochPushCallback(TrainerCallback):
+    """
+    Pushes the current trained adapter to Hugging Face at the end of every epoch.
+    Ensures that if the session is interrupted, intermediate checkpoints are preserved live on HF.
+    """
+    def __init__(self, output_repo, token):
+        self.output_repo = output_repo
+        self.token = token
+
+    def on_epoch_end(self, args, state, control, model=None, **kwargs):
+        current_epoch = int(round(state.epoch)) if state.epoch else "unknown"
+        print(f"\n[AUTO-CHECKPOINT] Epoch {current_epoch} completed! Pushing adapter weights to Hugging Face ({self.output_repo})...")
+        try:
+            if model is not None:
+                model.push_to_hub(
+                    self.output_repo,
+                    commit_message=f"auto-checkpoint: epoch {current_epoch} completed (step {state.global_step})",
+                    token=self.token,
+                    private=False
+                )
+                print(f"[SUCCESS] Epoch {current_epoch} adapter weights LIVE on Hugging Face!")
+        except Exception as e:
+            print(f"[WARNING] Could not auto-push epoch checkpoint ({e}). Continuing training...")
+
 # 5. Fine-Tuning Execution
-print("\n[Step 5/6] Executing QLoRA Training...")
+print("\n[Step 5/6] Executing QLoRA Training with Auto-Checkpointing...")
 training_args = TrainingArguments(
     output_dir="./medorqis_checkpoints",
     num_train_epochs=3,
@@ -235,7 +277,8 @@ training_args = TrainingArguments(
     gradient_checkpointing=True,
     gradient_checkpointing_kwargs={"use_reentrant": False},
     logging_steps=1,
-    save_strategy="no",
+    save_strategy="epoch",
+    save_total_limit=2,
     report_to="none",
     optim="paged_adamw_8bit"
 )
@@ -244,7 +287,8 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=tokenized_dataset,
-    data_collator=DataCollatorForSeq2Seq(tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True)
+    data_collator=DataCollatorForSeq2Seq(tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
+    callbacks=[EpochPushCallback(OUTPUT_REPO, HF_TOKEN)]
 )
 
 train_result = trainer.train()
