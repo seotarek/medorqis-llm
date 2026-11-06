@@ -130,8 +130,8 @@ def upload_dataset():
     except Exception as e:
         print(f"[NOTE] create_repo notice: {e}")
 
-    # 2. Upload JSONL dataset (150 scenarios)
-    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (150 clinical scenarios)...")
+    # 2. Upload JSONL dataset (200 scenarios)
+    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (200 clinical scenarios)...")
     api.upload_file(
         path_or_fileobj=LOCAL_DATASET_FILE,
         path_in_repo="train.jsonl",
@@ -139,7 +139,7 @@ def upload_dataset():
         repo_type="dataset",
         token=HF_TOKEN
     )
-    print("[SUCCESS] train.jsonl (150 scenarios) uploaded successfully.")
+    print("[SUCCESS] train.jsonl (200 scenarios) uploaded successfully.")
 
     # Remove root eval.jsonl if present to prevent PyArrow schema cast collisions
     try:

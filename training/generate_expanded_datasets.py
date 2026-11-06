@@ -181,6 +181,16 @@ def generate_expanded_datasets():
     additional_train.extend(EXPANDED_CLINICAL_CASES_PART3)
 
     train_records.extend(additional_train)
+
+    # Import and add curated real-world hospital cases (50 EHR & consultation cases)
+    hospital_cases_path = "training/hospital_curated_cases.jsonl"
+    if os.path.exists(hospital_cases_path):
+        with open(hospital_cases_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    train_records.append(json.loads(line))
+        print(f"[DATASET] Appended real-world hospital cases from {hospital_cases_path}")
     
     # Save training dataset
     train_path = "training/medorqis_clinical_instructions.jsonl"
