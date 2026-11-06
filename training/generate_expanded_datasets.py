@@ -176,6 +176,10 @@ def generate_expanded_datasets():
     from training.clinical_cases_expansion_part2 import EXPANDED_CLINICAL_CASES_PART2
     additional_train.extend(EXPANDED_CLINICAL_CASES_PART2)
 
+    # Import and add clinical cases 101 to 150
+    from training.clinical_cases_expansion_part3 import EXPANDED_CLINICAL_CASES_PART3
+    additional_train.extend(EXPANDED_CLINICAL_CASES_PART3)
+
     train_records.extend(additional_train)
     
     # Save training dataset

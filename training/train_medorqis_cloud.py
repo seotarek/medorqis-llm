@@ -86,49 +86,84 @@ def mask_labels_for_assistant(text: str, input_ids: list, offsets: Optional[list
     """
     Masks all non-assistant tokens with -100 so gradient descent only optimizes
     assistant-generated turns (rationale, tool calls, and clinical summaries).
+    Uses robust Token-ID sequence matching across fast/slow tokenizers.
     """
     labels = [-100] * len(input_ids)
-    assistant_header = "<|im_start|>assistant\n"
-    end_tag = "<|im_end|>"
     
-    # Identify character spans for assistant turns
-    spans = []
-    idx = 0
-    while True:
-        start = text.find(assistant_header, idx)
-        if start == -1:
-            break
-        content_start = start + len(assistant_header)
-        end = text.find(end_tag, content_start)
-        if end == -1:
-            spans.append((content_start, len(text)))
-            break
-        spans.append((content_start, end + len(end_tag)))
-        idx = end + len(end_tag)
-        
+    # 1. Fast Tokenizer offset mapping check (if available)
     if offsets:
+        spans = []
+        assistant_header = "<|im_start|>assistant"
+        end_tag = "<|im_end|>"
+        idx = 0
+        while True:
+            start = text.find(assistant_header, idx)
+            if start == -1:
+                break
+            nl = text.find("\n", start)
+            content_start = (nl + 1) if (nl != -1 and nl < start + 30) else (start + len(assistant_header))
+            end = text.find(end_tag, content_start)
+            if end == -1:
+                spans.append((content_start, len(text)))
+                break
+            spans.append((content_start, end + len(end_tag)))
+            idx = end + len(end_tag)
+            
+        has_any = False
         for i, (tok_start, tok_end) in enumerate(offsets):
             if tok_start == tok_end:
                 continue
             for s_start, s_end in spans:
                 if tok_start >= s_start and tok_end <= s_end:
                     labels[i] = input_ids[i]
+                    has_any = True
                     break
-        return labels
+        if has_any:
+            return labels
 
-    # Fallback token decoding scanner if offset mapping unavailable
+    # 2. Token-ID Sequence Matching (determinstic sliding window)
     if tokenizer:
-        in_assistant = False
-        for i, tid in enumerate(input_ids):
-            tok_str = tokenizer.decode([tid], skip_special_tokens=False)
-            if "<|im_start|>assistant" in tok_str or tok_str == "assistant\n":
-                in_assistant = True
-                continue
-            if in_assistant:
-                labels[i] = tid
-                if "<|im_end|>" in tok_str:
-                    in_assistant = False
-        return labels
+        candidates = [
+            tokenizer.encode("<|im_start|>assistant\n", add_special_tokens=False),
+            tokenizer.encode("<|im_start|>assistant", add_special_tokens=False),
+            tokenizer.encode("\n<|im_start|>assistant\n", add_special_tokens=False),
+        ]
+        candidates = [c for c in candidates if c]
+        end_seq = tokenizer.encode("<|im_end|>", add_special_tokens=False)
+        if not end_seq and tokenizer.eos_token_id is not None:
+            end_seq = [tokenizer.eos_token_id]
+
+        i = 0
+        n = len(input_ids)
+        while i < n:
+            matched_len = 0
+            for cand in candidates:
+                c_len = len(cand)
+                if i + c_len <= n and input_ids[i : i + c_len] == cand:
+                    matched_len = c_len
+                    break
+            
+            if matched_len > 0:
+                start_turn = i + matched_len
+                curr = start_turn
+                end_turn = n
+                while curr < n:
+                    if end_seq and curr + len(end_seq) <= n and input_ids[curr : curr + len(end_seq)] == end_seq:
+                        end_turn = curr + len(end_seq)
+                        break
+                    curr += 1
+                
+                for idx_turn in range(start_turn, end_turn):
+                    labels[idx_turn] = input_ids[idx_turn]
+                
+                i = end_turn
+            else:
+                i += 1
+                
+        # Fallback safeguard: if no assistant tokens were found, train on all non-pad tokens
+        if not any(l != -100 for l in labels):
+            pad_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else -100
+            labels = [tid if tid != pad_id else -100 for tid in input_ids]
 
     return labels
 
@@ -177,6 +212,14 @@ tokenized_dataset = raw_dataset.map(
     remove_columns=raw_dataset.column_names,
     desc="Tokenizing clinical instructions"
 )
+
+# Rigorous Quality Gate: Assert unmasked tokens exist so training loss is real and non-zero
+total_tokens = sum(len(x["input_ids"]) for x in tokenized_dataset)
+unmasked_tokens = sum(sum(1 for l in x["labels"] if l != -100) for x in tokenized_dataset)
+mask_pct = (unmasked_tokens / total_tokens) * 100 if total_tokens > 0 else 0
+print(f"[TOKEN STATS] Total: {total_tokens:,} | Unmasked (Assistant/Loss): {unmasked_tokens:,} ({mask_pct:.2f}%)")
+if unmasked_tokens == 0:
+    raise RuntimeError("CRITICAL ERROR: Unmasked token count is ZERO! Training loss would be 0.0000!")
 
 # 5. Fine-Tuning Execution
 print("\n[Step 5/6] Executing QLoRA Training...")

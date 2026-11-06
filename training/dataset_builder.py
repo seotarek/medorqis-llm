@@ -33,7 +33,11 @@ CLINICAL_TOOLS_SCHEMA = [
                             "news2_score",
                             "curb65_score",
                             "wells_dvt_score",
-                            "wells_pe_score"
+                            "wells_pe_score",
+                            "meld_na_score",
+                            "sofa_score",
+                            "burch_wartofsky_thyroid_storm",
+                            "perc_rule_pe"
                         ]
                     },
                     "parameters": {"type": "object"}
@@ -713,16 +717,19 @@ All personal identifiers (name, Egyptian NID, phone number, institutional site, 
 
 
 def build_and_export_dataset(output_path: str = "training/medorqis_clinical_instructions.jsonl"):
-    """Builds and writes dataset in JSONL format."""
+    """Builds and writes full 150-case dataset in JSONL format."""
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    records = get_curated_training_records()
-    
-    with open(output_path, "w", encoding="utf-8") as f:
-        for r in records:
-            f.write(json.dumps(r, ensure_ascii=False) + "\n")
-            
-    print(f"[DATASET BUILDER] Exported {len(records)} clinical instruction records to {output_path}")
-    return output_path
+    try:
+        from training.generate_expanded_datasets import generate_expanded_datasets
+        generate_expanded_datasets()
+        return output_path
+    except Exception:
+        records = get_curated_training_records()
+        with open(output_path, "w", encoding="utf-8") as f:
+            for r in records:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        print(f"[DATASET BUILDER] Exported {len(records)} clinical instruction records to {output_path}")
+        return output_path
 
 
 if __name__ == "__main__":

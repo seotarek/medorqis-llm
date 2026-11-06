@@ -66,7 +66,11 @@ CLINICAL_TOOLS_SCHEMA = [
                             "news2_score",
                             "curb65_score",
                             "wells_dvt_score",
-                            "wells_pe_score"
+                            "wells_pe_score",
+                            "meld_na_score",
+                            "sofa_score",
+                            "burch_wartofsky_thyroid_storm",
+                            "perc_rule_pe"
                         ]
                     },
                     "parameters": {"type": "object"}
@@ -432,6 +436,102 @@ def execute_deterministic_calculator(calc_id: str, params: Dict[str, Any]) -> Tu
                 adj = f"Renal adjustment calculated for {drug} at CrCl {val}"
                 num_val = 50.0
             return num_val, f"Renal Dosing: {adj}"
+
+        elif calc_id == "meld_na_score":
+            import math
+            bili = max(1.0, float(params.get("serum_bilirubin_mg_dl", params.get("bili", 1.0))))
+            inr = max(1.0, float(params.get("inr", 1.0)))
+            cr = min(4.0, max(1.0, float(params.get("serum_creatinine_mg_dl", params.get("cr", 1.0)))))
+            na = min(137.0, max(125.0, float(params.get("serum_sodium_meq_l", params.get("na", 135.0)))))
+            is_hd = bool(params.get("dialysis_past_week", False))
+            if is_hd:
+                cr = 4.0
+            meld_i = round(9.57 * math.log(cr) + 3.78 * math.log(bili) + 11.2 * math.log(inr) + 6.43)
+            if meld_i > 11:
+                meld_na = meld_i + 1.32 * (137 - na) - (0.033 * meld_i * (137 - na))
+                final_meld = min(40, max(6, round(meld_na)))
+            else:
+                final_meld = min(40, max(6, meld_i))
+            return float(final_meld), f"MELD-Na Score: {final_meld}"
+
+        elif calc_id == "sofa_score":
+            score = 0
+            pf = float(params.get("pao2_fio2_ratio", 450.0))
+            if pf < 100: score += 4
+            elif pf < 200: score += 3
+            elif pf < 300: score += 2
+            elif pf < 400: score += 1
+            plt = float(params.get("platelets_k_ul", 250.0))
+            if plt < 20: score += 4
+            elif plt < 50: score += 3
+            elif plt < 100: score += 2
+            elif plt < 150: score += 1
+            bili = float(params.get("bilirubin_mg_dl", 0.8))
+            if bili >= 12.0: score += 4
+            elif bili >= 6.0: score += 3
+            elif bili >= 2.0: score += 2
+            elif bili >= 1.2: score += 1
+            map_val = float(params.get("map_mmhg", 85.0))
+            has_high_pressor = bool(params.get("high_dose_vasopressor", False))
+            has_low_pressor = bool(params.get("low_dose_vasopressor", False))
+            if has_high_pressor: score += 4
+            elif has_low_pressor: score += 2
+            elif map_val < 70: score += 1
+            gcs = int(params.get("gcs", 15))
+            if gcs < 6: score += 4
+            elif gcs <= 9: score += 3
+            elif gcs <= 12: score += 2
+            elif gcs <= 14: score += 1
+            cr = float(params.get("creatinine_mg_dl", 0.9))
+            if cr >= 5.0: score += 4
+            elif cr >= 3.5: score += 3
+            elif cr >= 2.0: score += 2
+            elif cr >= 1.2: score += 1
+            return float(score), f"SOFA Score: {score}"
+
+        elif calc_id == "burch_wartofsky_thyroid_storm":
+            bw_score = 0
+            t = float(params.get("temperature_c", 37.0))
+            if t >= 40.0: bw_score += 30
+            elif t >= 39.5: bw_score += 25
+            elif t >= 38.9: bw_score += 20
+            elif t >= 38.4: bw_score += 15
+            elif t >= 37.8: bw_score += 10
+            elif t >= 37.2: bw_score += 5
+            hr = int(params.get("heart_rate", 80))
+            if hr >= 140: bw_score += 25
+            elif hr >= 130: bw_score += 20
+            elif hr >= 120: bw_score += 15
+            elif hr >= 110: bw_score += 10
+            elif hr >= 100: bw_score += 5
+            if bool(params.get("atrial_fibrillation", False)): bw_score += 10
+            cns = str(params.get("cns_effect", "none")).lower()
+            if "seizure" in cns or "coma" in cns: bw_score += 30
+            elif "delirium" in cns or "psychosis" in cns: bw_score += 20
+            elif "agitation" in cns: bw_score += 10
+            if bool(params.get("jaundice", False)): bw_score += 20
+            elif bool(params.get("diarrhea_vomiting_abdominal_pain", False)): bw_score += 10
+            hf = str(params.get("heart_failure", "none")).lower()
+            if "severe" in hf or "edema" in hf: bw_score += 15
+            elif "moderate" in hf: bw_score += 10
+            elif "mild" in hf: bw_score += 5
+            status = "Thyroid Storm Highly Likely" if bw_score >= 45 else ("Impending Thyroid Storm" if bw_score >= 25 else "Thyroid Storm Unlikely")
+            return float(bw_score), f"BWPS Score: {bw_score} ({status})"
+
+        elif calc_id == "perc_rule_pe":
+            criteria = [
+                int(params.get("age_years", 0)) >= 50,
+                int(params.get("heart_rate", 0)) >= 100,
+                float(params.get("spo2_percent", 100.0)) < 95.0,
+                bool(params.get("unilateral_leg_swelling", False)),
+                bool(params.get("hemoptysis", False)),
+                bool(params.get("recent_surgery_trauma_4weeks", False)),
+                bool(params.get("prior_pe_dvt", False)),
+                bool(params.get("hormone_estrogen_use", False))
+            ]
+            positives = sum(criteria)
+            ruled_out = (positives == 0)
+            return float(positives), ("PERC Positive" if not ruled_out else "PERC Negative (PE ruled out safely)")
 
     except Exception as e:
         return None, f"Execution Error: {e}"

@@ -83,19 +83,23 @@ The official foundational instruction-tuning and function-calling dataset for th
   - `pediatric_weight_dose` (Weight-based dosing)
   - `check_drug_interactions` (Severe / Fatal DDI detection)
   - `check_red_flags` (Emergency escalation & safety guardrails)
+  - `meld_na_score` (Liver Failure & Transplant Listing Priority)
+  - `sofa_score` (Sepsis-3 ICU Sequential Organ Failure Assessment)
+  - `burch_wartofsky_thyroid_storm` (Endocrine Emergency BWPS Evaluation)
+  - `perc_rule_pe` (Pulmonary Embolism Safe Radiation-Free Exclusion)
   - `scrub_phi` (HIPAA 18, Egyptian NID, Saudi Iqama anonymization)
   - `normalize_terminology` (Trade-to-INN and dialect mapping)
 
-##  Dataset Structure
+## Dataset Structure
 
 Each JSONL record represents a conversational session with:
 - `id`: Unique record identifier (e.g. `medorqis-cardio-ar-001`)
 - `language`: `ar`, `en`, or `ar-en`
-- `domain`: Medical domain (`cardiology`, `nephrology`, `pharmacology`, `pediatrics`, `emergency`, `privacy`)
+- `domain`: Medical domain (`cardiology`, `nephrology`, `pharmacology`, `pediatrics`, `emergency`, `hepatology`, `critical_care_sofa`, `endocrinology_emergency`, `pulmonology_emergency`)
 - `tools`: Available tool declarations formatted in OpenAI/Qwen JSON Schema
 - `messages`: Conversational messages formatted in ChatML (`system`, `user`, `assistant`, `tool`)
 
-##  License & Attribution
+## License & Attribution
 
 Licensed under Apache 2.0. Developed as part of the MedOrqis Medical AI Skills Ecosystem.
 """
@@ -126,8 +130,8 @@ def upload_dataset():
     except Exception as e:
         print(f"[NOTE] create_repo notice: {e}")
 
-    # 2. Upload JSONL dataset (100 scenarios)
-    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (100 clinical scenarios)...")
+    # 2. Upload JSONL dataset (150 scenarios)
+    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (150 clinical scenarios)...")
     api.upload_file(
         path_or_fileobj=LOCAL_DATASET_FILE,
         path_in_repo="train.jsonl",
@@ -135,7 +139,7 @@ def upload_dataset():
         repo_type="dataset",
         token=HF_TOKEN
     )
-    print("[SUCCESS] train.jsonl (100 scenarios) uploaded successfully.")
+    print("[SUCCESS] train.jsonl (150 scenarios) uploaded successfully.")
 
     # Remove root eval.jsonl if present to prevent PyArrow schema cast collisions
     try:
