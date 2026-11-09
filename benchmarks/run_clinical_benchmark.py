@@ -24,9 +24,16 @@ from typing import Dict, Any, Tuple, Optional, List
 sys.modules['torchvision'] = None
 sys.modules['torchvision.transforms'] = None
 
-import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
-from peft import PeftModel
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+    from peft import PeftModel
+except ImportError:
+    torch = None
+    AutoTokenizer = None
+    AutoModelForCausalLM = None
+    BitsAndBytesConfig = None
+    PeftModel = None
 
 HF_TOKEN = "".join(["hf_", "FOEwmPyJISOLLVSFfIDHoOgoDnjGRpTAmU"])
 BASE_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
