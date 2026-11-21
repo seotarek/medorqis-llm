@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="dark scroll-smooth">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MedOrqis-LLM (ميد أوركيس) — النموذج اللغوي السريري وحاسبات الطب الحتمية</title>
   <meta name="description" content="MedOrqis-LLM: نموذج الذكاء الاصطناعي السريري التأسيسي ثنائي اللغة. دمج الفهم اللغوي الطبي مع محرك استدعاء الأدوات الحسابية الحتمية لضمان صفر هلوسة سريرية وأمان جرعات الأطفال.">
   
-  <!-- Modern Typography Fonts -->
+  <!-- Exclusive Bespoke MedOrqis Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300E5C3'/%3E%3Cstop offset='100%25' stop-color='%2338BDF8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='%23050A12'/%3E%3Cpath d='M20 4 L33.8 12 V28 L20 36 L6.2 28 V12 Z' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Cpath d='M12.5 16 L9 20 L12.5 24 M27.5 16 L31 20 L27.5 24' fill='none' stroke='%2338BDF8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M14 20 H16.8 L18.6 13.5 L21.4 26.5 L23.2 17.5 L24.5 20 H26' fill='none' stroke='%2300E5C3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <!-- Typography Stack -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN (Single Unified Color System: Clinical Bio-Code Palette) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -24,37 +26,28 @@
             mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
-            void: '#030712',
-            surface: {
-              root: '#050914',
-              subtle: '#0B1120',
-              card: '#0F172A',
-              elevated: '#1E293B',
-              border: '#1E293B',
-              active: '#334155'
-            },
-            clinical: {
-              cyan: '#00F0FF',
-              emerald: '#10B981',
+            med: {
+              obsidian: '#050A12',
+              panel: '#0A121E',
+              elevated: '#101B2D',
+              border: '#18263C',
+              teal: '#00E5C3',
               blue: '#38BDF8',
+              mint: '#10B981',
               amber: '#F59E0B',
-              rose: '#F43F5E',
-              violet: '#8B5CF6'
+              crimson: '#F43F5E',
+              text: '#F1F5F9',
+              muted: '#94A3B8'
             }
           },
           animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'glow-cyan': 'glowCyan 4s ease-in-out infinite alternate',
-            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'aurora': 'aurora 6s ease-in-out infinite alternate',
           },
           keyframes: {
-            glowCyan: {
-              '0%': { opacity: '0.3', transform: 'scale(1)' },
-              '100%': { opacity: '0.7', transform: 'scale(1.08)' }
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-8px)' }
+            aurora: {
+              '0%': { opacity: '0.25', transform: 'scale(1)' },
+              '100%': { opacity: '0.55', transform: 'scale(1.06)' }
             }
           }
         }
@@ -63,95 +56,118 @@
   </script>
 
   <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #030712; }
-    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    :root {
+      color-scheme: dark;
+    }
 
-    /* Radial Ambient Lighting */
-    .ambient-glow {
+    body {
+      background-color: #050A12;
+      color: #F1F5F9;
+    }
+
+    /* Unified Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #050A12; }
+    ::-webkit-scrollbar-thumb { background: #18263C; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #263B5C; }
+
+    /* Ambient Bio-Teal & Clinical Blue Lighting */
+    .ambient-orb {
       position: absolute;
-      width: 600px;
-      height: 600px;
+      width: 560px;
+      height: 560px;
       border-radius: 50%;
-      filter: blur(140px);
+      filter: blur(150px);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Grid Texture */
-    .bg-grid-pattern {
-      background-size: 32px 32px;
+    /* Precision Engineering Grid */
+    .bio-grid {
+      background-size: 36px 36px;
       background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(to right, rgba(0, 229, 195, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
     }
 
-    /* Double Bezel Glass Card */
-    .double-bezel {
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Unified Surgical Glass Surface */
+    .clinical-surface {
+      background: rgba(10, 18, 30, 0.78);
+      border: 1px solid #18263C;
       box-shadow: 
-        inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
-        0 12px 32px -4px rgba(0, 0, 0, 0.5);
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+        0 16px 40px -8px rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
     }
 
-    /* Gauge Arc */
+    /* Gauge Circle Transition */
     .gauge-circle {
       transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
   </style>
 </head>
-<body class="bg-void text-slate-200 font-sans antialiased selection:bg-clinical-cyan/20 selection:text-clinical-cyan min-h-screen relative overflow-x-hidden">
+<body class="bg-med-obsidian text-med-text font-sans antialiased selection:bg-med-teal/20 selection:text-med-teal min-h-screen relative overflow-x-hidden">
 
-  <!-- Ambient Light Orbs -->
-  <div class="ambient-glow bg-emerald-600/15 top-[-100px] right-[-100px] animate-glow-cyan"></div>
-  <div class="ambient-glow bg-cyan-600/15 top-[400px] left-[-200px] animate-glow-cyan" style="animation-delay: -2s;"></div>
-  <div class="ambient-glow bg-violet-600/10 top-[1800px] right-[-150px]"></div>
+  <!-- Unified Bio-Code Ambient Orbs -->
+  <div class="ambient-orb bg-med-teal/10 top-[-120px] right-[-100px] animate-aurora"></div>
+  <div class="ambient-orb bg-med-blue/10 top-[450px] left-[-180px] animate-aurora" style="animation-delay: -3s;"></div>
+  <div class="ambient-orb bg-med-teal/5 top-[1800px] right-[-120px]"></div>
 
-  <!-- Background Grid Texture -->
-  <div class="fixed inset-0 bg-grid-pattern pointer-events-none opacity-60 z-0"></div>
+  <!-- Fixed Engineering Grid -->
+  <div class="fixed inset-0 bio-grid pointer-events-none z-0"></div>
 
-  <!-- FLOATING CAPSULE NAVBAR -->
+  <!-- FLOATING GLASS CAPSULE HEADER -->
   <header class="fixed top-4 inset-x-0 z-50 px-4">
-    <div class="max-w-6xl mx-auto double-bezel rounded-full px-5 py-2.5 flex items-center justify-between transition-all duration-300">
+    <div class="max-w-6xl mx-auto clinical-surface rounded-full px-5 py-2.5 flex items-center justify-between">
       
-      <!-- Brand Single-Line Lockup -->
+      <!-- EXCLUSIVE BESPOKE MEDORQIS BRAND LOCKUP -->
       <a href="#" class="flex items-center gap-3 group shrink-0">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-cyan-500/20 to-emerald-500/20 border border-clinical-cyan/40 flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.25)] group-hover:scale-105 transition-transform">
-          <svg class="w-5 h-5 text-clinical-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        <div class="relative w-10 h-10 flex items-center justify-center">
+          <svg class="w-10 h-10 transition-transform duration-300 group-hover:scale-105" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="medLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00E5C3" />
+                <stop offset="100%" stop-color="#38BDF8" />
+              </linearGradient>
+            </defs>
+            <!-- Molecular / System Hexagon -->
+            <path d="M20 3 L34.7 11.5 V28.5 L20 37 L5.3 28.5 V11.5 Z" fill="#0A121E" stroke="url(#medLogoGrad)" stroke-width="1.75"/>
+            <!-- Medical Axis Ticks (Top & Bottom) -->
+            <path d="M20 7.5 V10.5 M20 29.5 V32.5" stroke="#00E5C3" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+            <!-- Programming Code Brackets < > -->
+            <path d="M12.5 15.5 L8.5 20 L12.5 24.5" stroke="#38BDF8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M27.5 15.5 L31.5 20 L27.5 24.5" stroke="#38BDF8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Central Cardiac Vital ECG Pulse -->
+            <path d="M13.5 20 H16.5 L18.5 13 L21.5 27 L23.5 17.5 L25 20 H26.5" stroke="#00E5C3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="flex items-baseline gap-2">
-          <span class="text-base font-black tracking-tight text-white font-en">MedOrqis<span class="text-clinical-cyan">-LLM</span></span>
-          <span class="text-xs text-slate-400 font-semibold hidden sm:inline">(ميد أوركيس)</span>
+          <span class="text-base font-black tracking-tight text-white font-en">MedOrqis<span class="text-med-teal">-LLM</span></span>
+          <span class="text-xs text-med-muted font-semibold hidden sm:inline">(ميد أوركيس)</span>
         </div>
       </a>
 
-      <!-- Desktop Navigation Menu -->
-      <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
-        <a href="#simulator" class="hover:text-clinical-cyan transition-colors flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-clinical-cyan"></span>
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-med-muted">
+        <a href="#simulator" class="text-white hover:text-med-teal transition-colors flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-med-teal"></span>
           المختبر السريري
         </a>
-        <a href="#pipeline" class="hover:text-clinical-cyan transition-colors">معمارية التدفق</a>
-        <a href="#benchmarks" class="hover:text-clinical-cyan transition-colors">المعايرة والأداء</a>
-        <a href="#datasets" class="hover:text-clinical-cyan transition-colors">بيانات MIMIC و eICU</a>
-        <a href="#governance" class="hover:text-clinical-cyan transition-colors">الحوكمة والأوراق</a>
+        <a href="#pipeline" class="hover:text-med-teal transition-colors">معمارية التدفق</a>
+        <a href="#benchmarks" class="hover:text-med-teal transition-colors">المعايرة والأداء</a>
+        <a href="#datasets" class="hover:text-med-teal transition-colors">بيانات MIMIC و eICU</a>
+        <a href="#governance" class="hover:text-med-teal transition-colors">الحوكمة</a>
       </nav>
 
-      <!-- Live Telemetry Status & GitHub Action -->
+      <!-- Live Compute Telemetry & GitHub -->
       <div class="flex items-center gap-3">
-        <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-med-teal/10 border border-med-teal/30 text-[11px] font-mono text-med-teal">
+          <span class="w-2 h-2 rounded-full bg-med-teal animate-ping"></span>
           <span>Dual T4 Online</span>
         </div>
-        <a href="https://github.com/seotarek/medorqis-llm" target="_blank" class="px-4 py-1.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-bold font-en flex items-center gap-2 transition-all hover:scale-105">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <a href="https://github.com/seotarek/medorqis-llm" target="_blank" class="px-4 py-1.5 rounded-full bg-med-elevated hover:bg-med-border border border-med-border text-white text-xs font-bold font-en flex items-center gap-2 transition-all hover:border-med-blue">
+          <svg class="w-4 h-4 fill-current text-med-blue" viewBox="0 0 24 24">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
           </svg>
           <span class="hidden sm:inline">GitHub</span>
@@ -161,16 +177,16 @@
   </header>
 
   <!-- HERO SECTION -->
-  <main class="relative z-10 pt-32 md:pt-40 pb-20 px-4 md:px-6">
+  <main class="relative z-10 pt-36 md:pt-44 pb-20 px-4 md:px-6">
     <div class="max-w-6xl mx-auto">
       
-      <!-- Top Eyebrow Badge -->
+      <!-- Eyebrow Badge -->
       <div class="flex items-center justify-center mb-6">
-        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-900/80 border border-clinical-cyan/30 text-xs font-semibold text-slate-300 backdrop-blur-md shadow-lg shadow-cyan-950/30">
-          <span class="w-2 h-2 rounded-full bg-clinical-cyan animate-pulse"></span>
-          <span>النموذج اللغوي السريري الأول الموجه بالأدوات الحتمية</span>
-          <span class="text-slate-600">|</span>
-          <span class="font-mono text-clinical-emerald font-bold">ESC 2024 • KDIGO 2024</span>
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-med-panel border border-med-teal/30 text-xs font-semibold text-med-muted shadow-lg shadow-black/40">
+          <span class="w-2 h-2 rounded-full bg-med-teal animate-pulse"></span>
+          <span>هندسة برمجيات الطب الحتمية</span>
+          <span class="text-med-border">|</span>
+          <span class="font-mono text-med-blue font-bold">ESC 2024 • KDIGO 2024</span>
         </div>
       </div>
 
@@ -178,78 +194,78 @@
       <div class="text-center max-w-5xl mx-auto mb-6">
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.2] md:leading-[1.18]">
           ذكاء سريري لغوي حتمي.<br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-med-teal via-med-blue to-med-mint">
             صفر هلوسة في الحسابات الطبية الحرجة.
           </span>
         </h1>
       </div>
 
       <!-- Subtitle Description -->
-      <p class="text-base sm:text-lg text-slate-400 text-center max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
-        النماذج اللغوية العامة تعتمد على التخمين الإحصائي وتسبب أخطاء قاتلة في حساب وظائف الكلى وجرعات الأطفال. 
-        نموذج <strong class="text-white font-semibold">MedOrqis-LLM</strong> يفصل تماماً بين الفهم الطبي السريري واستخراج المعاملات، وبين محرك الحسابات الحتمي الدقيق الذي يضمن <strong class="text-clinical-cyan font-mono">0.00% خطأ حسابي</strong> و <strong class="text-clinical-emerald font-mono">100.0% سقف أمان</strong>.
+      <p class="text-base sm:text-lg text-med-muted text-center max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
+        النماذج اللغوية العامة تولّد الأرقام بأسلوب احتمالي يسبب أخطاءً قاتلة في وظائف الكلى وجرعات الأطفال. 
+        منظومة <strong class="text-white font-semibold">MedOrqis-LLM</strong> تفصل تماماً بين الفهم السريري للنصوص الطبية، وبين محرك بايثون البرمجي الحتمي الذي يضمن <strong class="text-med-teal font-mono">0.00% خطأ حسابي</strong> و <strong class="text-med-blue font-mono">100.0% التزام بسقف الأمان</strong>.
       </p>
 
       <!-- Action Buttons -->
       <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
-        <a href="#simulator" class="px-7 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-black text-sm transition-all duration-200 shadow-xl shadow-cyan-500/20 hover:scale-105 flex items-center gap-3 group">
+        <a href="#simulator" class="px-7 py-4 rounded-full bg-gradient-to-r from-med-teal to-med-blue hover:opacity-95 text-med-obsidian font-black text-sm transition-all duration-200 shadow-xl shadow-med-teal/20 hover:scale-105 flex items-center gap-3 group">
           <span>ابدأ التجربة السريرية الحية</span>
-          <div class="w-6 h-6 rounded-full bg-slate-950/20 flex items-center justify-center group-hover:translate-x-[-2px] transition-transform">
+          <div class="w-6 h-6 rounded-full bg-med-obsidian/15 flex items-center justify-center group-hover:translate-x-[-2px] transition-transform">
             <svg class="w-3.5 h-3.5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
             </svg>
           </div>
         </a>
-        <a href="https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions" target="_blank" class="px-7 py-4 rounded-full double-bezel hover:bg-slate-800/80 text-white font-bold text-sm transition-all duration-200 flex items-center gap-2.5 font-en">
-          <span class="w-2 h-2 rounded-full bg-clinical-emerald"></span>
+        <a href="https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions" target="_blank" class="px-7 py-4 rounded-full clinical-surface hover:border-med-teal/50 text-white font-bold text-sm transition-all duration-200 flex items-center gap-2.5 font-en">
+          <span class="w-2 h-2 rounded-full bg-med-teal"></span>
           <span>1,258 Clinical Records (HF Hub)</span>
         </a>
       </div>
 
-      <!-- REAL-TIME CARDIAC ECG & TELEMETRY HUD -->
-      <div class="double-bezel rounded-3xl p-6 md:p-8 relative overflow-hidden mb-20">
+      <!-- LIVE CARDIAC ECG & CODE TELEMETRY HUD -->
+      <div class="clinical-surface rounded-3xl p-6 md:p-8 relative overflow-hidden mb-20">
         
-        <!-- ECG Wave Canvas Header -->
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800/80 mb-6">
+        <!-- HUD Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-med-border mb-6">
           <div class="flex items-center gap-3">
-            <div class="w-3 h-3 rounded-full bg-clinical-emerald animate-ping"></div>
-            <span class="text-xs font-mono text-slate-300 font-bold uppercase tracking-wider">Live Bedside Telemetry Monitor</span>
-            <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-cyan-400">Lead II • 25 mm/s</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-med-teal animate-ping"></div>
+            <span class="text-xs font-mono text-white font-bold uppercase tracking-wider">MedOrqis Surgical Telemetry HUD</span>
+            <span class="px-2 py-0.5 rounded bg-med-elevated border border-med-border text-[10px] font-mono text-med-blue">Lead II • Python Deterministic Core</span>
           </div>
-          <div class="flex items-center gap-4 text-xs font-mono text-slate-400">
-            <div>HR: <span class="text-emerald-400 font-bold">72 BPM</span></div>
-            <div>SpO2: <span class="text-cyan-400 font-bold">99%</span></div>
-            <div>eGFR Latency: <span class="text-white font-bold">239 ns</span></div>
+          <div class="flex items-center gap-5 text-xs font-mono text-med-muted">
+            <div>HR: <span class="text-med-teal font-bold">72 BPM</span></div>
+            <div>SpO2: <span class="text-med-blue font-bold">99%</span></div>
+            <div>Latency: <span class="text-white font-bold">239 ns</span></div>
           </div>
         </div>
 
-        <!-- Canvas Waveform -->
-        <div class="relative h-20 w-full mb-8 bg-slate-950/60 rounded-xl overflow-hidden border border-slate-800/50">
+        <!-- Real-Time ECG Waveform Canvas -->
+        <div class="relative h-20 w-full mb-8 bg-med-obsidian rounded-xl overflow-hidden border border-med-border">
           <canvas id="ecgCanvas" class="w-full h-full block"></canvas>
-          <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent pointer-events-none"></div>
+          <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-med-obsidian to-transparent pointer-events-none"></div>
         </div>
 
-        <!-- 4 Critical Architecture Stat Cards -->
+        <!-- 4 Unified KPI Cards -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center font-mono">
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/60">
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Arithmetic Error</div>
-            <div class="text-3xl lg:text-4xl font-black text-clinical-cyan">0.00%</div>
-            <div class="text-[11px] text-slate-500 font-sans mt-1">محرك بايثون الحتمي</div>
+          <div class="p-4 rounded-2xl bg-med-obsidian/90 border border-med-border">
+            <div class="text-[11px] text-med-muted uppercase tracking-wider mb-1">Arithmetic Error</div>
+            <div class="text-3xl lg:text-4xl font-black text-med-teal">0.00%</div>
+            <div class="text-[11px] text-med-muted font-sans mt-1">محرك بايثون الحتمي</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/60">
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Pediatric Safety</div>
-            <div class="text-3xl lg:text-4xl font-black text-clinical-emerald">100.0%</div>
-            <div class="text-[11px] text-slate-500 font-sans mt-1">سقف أمان الأطفال الصارم</div>
+          <div class="p-4 rounded-2xl bg-med-obsidian/90 border border-med-border">
+            <div class="text-[11px] text-med-muted uppercase tracking-wider mb-1">Pediatric Safety</div>
+            <div class="text-3xl lg:text-4xl font-black text-med-mint">100.0%</div>
+            <div class="text-[11px] text-med-muted font-sans mt-1">سقف أمان الأطفال الصارم</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/60">
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Clinical Gold Cases</div>
+          <div class="p-4 rounded-2xl bg-med-obsidian/90 border border-med-border">
+            <div class="text-[11px] text-med-muted uppercase tracking-wider mb-1">Clinical Gold Cases</div>
             <div class="text-3xl lg:text-4xl font-black text-white">1,258</div>
-            <div class="text-[11px] text-slate-500 font-sans mt-1">حالات MIMIC و eICU الحقيقية</div>
+            <div class="text-[11px] text-med-muted font-sans mt-1">حالات MIMIC و eICU الحقيقية</div>
           </div>
-          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800/60">
-            <div class="text-[11px] text-slate-400 uppercase tracking-wider mb-1">Compute Latency</div>
-            <div class="text-3xl lg:text-4xl font-black text-clinical-blue font-en">&lt; 300 ns</div>
-            <div class="text-[11px] text-slate-500 font-sans mt-1">استجابة حتمية فائقة السرعة</div>
+          <div class="p-4 rounded-2xl bg-med-obsidian/90 border border-med-border">
+            <div class="text-[11px] text-med-muted uppercase tracking-wider mb-1">Execution Speed</div>
+            <div class="text-3xl lg:text-4xl font-black text-med-blue font-en">&lt; 300 ns</div>
+            <div class="text-[11px] text-med-muted font-sans mt-1">استجابة برمجية فائقة</div>
           </div>
         </div>
 
@@ -259,81 +275,76 @@
   </main>
 
   <!-- SECTION: INTERACTIVE PIPELINE INFOGRAPHIC (معمارية التدفق السريري) -->
-  <section id="pipeline" class="py-20 px-4 md:px-6 relative z-10 border-t border-slate-800/60">
+  <section id="pipeline" class="py-24 px-4 md:px-6 relative z-10 border-t border-med-border">
     <div class="max-w-6xl mx-auto">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-clinical-cyan text-xs font-mono font-bold uppercase tracking-wider mb-3">
-          Architecture & Flow
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-med-teal/10 border border-med-teal/30 text-med-teal text-xs font-mono font-bold uppercase tracking-wider mb-3">
+          System Architecture & Flow
         </div>
         <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
-          كيف يعمل محرك MedOrqis؟
+          كيف يتكامل الكود والطب داخل MedOrqis؟
         </h2>
-        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-          فصل ذكي ومتعمد لمسارات المعالجة: النموذج اللغوي يفسر الشكاوى السريرية، ومحرك الأمان الحتمي يتولى الحسابات الرياضية والجرعات الحساسة بدون أي احتمالية للهلوسة.
+        <p class="text-med-muted text-sm md:text-base leading-relaxed">
+          هندسة برمجية صارمة تفصل بين معالجة اللغة الطبيعية وتنفيذ الحسابات الرياضية الحرجة داخل بيئة معزولة وآمنة.
         </p>
       </div>
 
-      <!-- 5-Step Animated Interactive Pipeline -->
+      <!-- 5-Step Pipeline Infographic -->
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
         
-        <!-- Step 1 -->
-        <div class="double-bezel rounded-2xl p-5 relative group hover:border-clinical-cyan/50 transition-all duration-300">
-          <div class="w-8 h-8 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-clinical-cyan font-mono font-bold text-xs flex items-center justify-center mb-4">01</div>
+        <div class="clinical-surface rounded-2xl p-5 hover:border-med-blue/50 transition-all duration-300">
+          <div class="w-8 h-8 rounded-full bg-med-elevated border border-med-blue/40 text-med-blue font-mono font-bold text-xs flex items-center justify-center mb-4">01</div>
           <h3 class="text-base font-bold text-white mb-2">استقبال الشكوى</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">
-            فهم نصوص وسجلات المرضى باللغة العربية الفصحى أو اللهجات الإقليمية والإنجليزية السريرية.
+          <p class="text-xs text-med-muted leading-relaxed font-light">
+            تحليل الشكوى السريرية بالعربية الفصحى واللهجات الإقليمية والنصوص الإنجليزية.
           </p>
-          <div class="mt-4 pt-3 border-t border-slate-800/60 font-mono text-[10px] text-slate-500">
-            Natural NLP & Dialects
+          <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-blue">
+            Clinical NLP Parser
           </div>
         </div>
 
-        <!-- Step 2 -->
-        <div class="double-bezel rounded-2xl p-5 relative group hover:border-emerald-500/50 transition-all duration-300">
-          <div class="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center mb-4">02</div>
+        <div class="clinical-surface rounded-2xl p-5 hover:border-med-teal/50 transition-all duration-300">
+          <div class="w-8 h-8 rounded-full bg-med-elevated border border-med-teal/40 text-med-teal font-mono font-bold text-xs flex items-center justify-center mb-4">02</div>
           <h3 class="text-base font-bold text-white mb-2">التطهير والاستخلاص</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">
-            حجب بيانات الهوية (HIPAA 18) واستخلاص المؤشرات المخبرية الحيوية (الكرياتينين، الوزن، الضغط).
+          <p class="text-xs text-med-muted leading-relaxed font-light">
+            حجب بيانات الهوية الشخصية (HIPAA 18) واستخلاص القيم المخبرية الدقيقة.
           </p>
-          <div class="mt-4 pt-3 border-t border-slate-800/60 font-mono text-[10px] text-slate-500">
-            De-identification & NER
+          <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-teal">
+            PHI Scrub & NER
           </div>
         </div>
 
-        <!-- Step 3 (Center Highlight) -->
-        <div class="double-bezel rounded-2xl p-5 relative group border-clinical-cyan/40 bg-slate-900/80 shadow-[0_0_25px_rgba(0,240,255,0.1)] transition-all duration-300">
-          <div class="w-8 h-8 rounded-full bg-clinical-cyan text-slate-950 font-mono font-black text-xs flex items-center justify-center mb-4">03</div>
-          <h3 class="text-base font-bold text-clinical-cyan mb-2">الاستدعاء الحتمي</h3>
-          <p class="text-xs text-slate-300 leading-relaxed font-light">
-            توليد استدعاء دالة منظمة (Function Call) لمحرك بايثون المنفصل وتطبيق المعادلات الدولية بدقة 100%.
+        <div class="clinical-surface rounded-2xl p-5 border-med-teal/60 bg-med-elevated/60 shadow-[0_0_25px_rgba(0,229,195,0.12)] transition-all duration-300">
+          <div class="w-8 h-8 rounded-full bg-med-teal text-med-obsidian font-mono font-black text-xs flex items-center justify-center mb-4">03</div>
+          <h3 class="text-base font-bold text-med-teal mb-2">الاستدعاء الحتمي</h3>
+          <p class="text-xs text-white leading-relaxed font-light">
+            توليد كود استدعاء منظم (JSON Tool-Call) لتنفيذ المعادلات الرياضية في بايثون بنسبة 100%.
           </p>
-          <div class="mt-4 pt-3 border-t border-slate-800/60 font-mono text-[10px] text-clinical-cyan">
-            Deterministic Engine
+          <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-teal">
+            Deterministic Core
           </div>
         </div>
 
-        <!-- Step 4 -->
-        <div class="double-bezel rounded-2xl p-5 relative group hover:border-amber-500/50 transition-all duration-300">
-          <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono font-bold text-xs flex items-center justify-center mb-4">04</div>
+        <div class="clinical-surface rounded-2xl p-5 hover:border-med-crimson/50 transition-all duration-300">
+          <div class="w-8 h-8 rounded-full bg-med-elevated border border-med-crimson/40 text-med-crimson font-mono font-bold text-xs flex items-center justify-center mb-4">04</div>
           <h3 class="text-base font-bold text-white mb-2">صمام أمان الأطفال</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">
-            تطبيق السقف الأقصى لجرعات البالغين لحظر أي جرعة زائدة للأطفال (Zero Overdose Policy).
+          <p class="text-xs text-med-muted leading-relaxed font-light">
+            حماية برمجية تمنع تخطي الجرعات المحسوبة لسقف البالغين لحظر التسمم الدوائي.
           </p>
-          <div class="mt-4 pt-3 border-t border-slate-800/60 font-mono text-[10px] text-slate-500">
-            Adult Ceiling Guardrail
+          <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-crimson">
+            Zero Overdose Guard
           </div>
         </div>
 
-        <!-- Step 5 -->
-        <div class="double-bezel rounded-2xl p-5 relative group hover:border-emerald-500/50 transition-all duration-300">
-          <div class="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center mb-4">05</div>
+        <div class="clinical-surface rounded-2xl p-5 hover:border-med-mint/50 transition-all duration-300">
+          <div class="w-8 h-8 rounded-full bg-med-elevated border border-med-mint/40 text-med-mint font-mono font-bold text-xs flex items-center justify-center mb-4">05</div>
           <h3 class="text-base font-bold text-white mb-2">التقرير المعتمد</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">
-            صياغة القرار الطبي النهائي الموثق بالإرشادات العالمية بصيغتي SOAP و ISBAR للطبيب المعالج.
+          <p class="text-xs text-med-muted leading-relaxed font-light">
+            إخراج التوصية الطبية الموثقة بإرشادات KDIGO و ESC 2024 بصيغتي SOAP و ISBAR.
           </p>
-          <div class="mt-4 pt-3 border-t border-slate-800/60 font-mono text-[10px] text-slate-500">
-            KDIGO 2024 • ESC 2024
+          <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-mint">
+            Verified Output
           </div>
         </div>
 
@@ -342,106 +353,106 @@
     </div>
   </section>
 
-  <!-- SECTION: THE CLINICAL SIMULATOR (المختبر السريري التفاعلي فائق التطور) -->
-  <section id="simulator" class="py-24 px-4 md:px-6 relative z-10 border-t border-slate-800/60 bg-slate-950/30">
+  <!-- SECTION: INTERACTIVE BEDSIDE CLINICAL SIMULATOR (المختبر السريري التفاعلي) -->
+  <section id="simulator" class="py-24 px-4 md:px-6 relative z-10 border-t border-med-border bg-med-panel/30">
     <div class="max-w-6xl mx-auto">
       
       <div class="text-center max-w-3xl mx-auto mb-14">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-med-blue/10 border border-med-blue/30 text-med-blue text-xs font-mono font-bold uppercase tracking-wider mb-3">
           Interactive Bedside Lab
         </div>
         <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
           المختبر السريري التفاعلي المباشر
         </h2>
-        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-          جرب حاسبات MedOrqis السريرية الحتمية بنفسك. عدّل القيم في الوقت الفعلي ولاحظ الحسابات الرياضية الدقيقة مع مقياس الخطورة المباشر.
+        <p class="text-med-muted text-sm md:text-base leading-relaxed">
+          اختبر محرك MedOrqis الحتمي بنفسك. حرك المؤشرات لمحاكاة القيم السريرية ومراقبة المخرجات الهندسية والـ JSON في الوقت الفعلي.
         </p>
       </div>
 
       <!-- Simulator Shell -->
-      <div class="double-bezel rounded-3xl overflow-hidden p-6 md:p-8">
+      <div class="clinical-surface rounded-3xl overflow-hidden p-6 md:p-8">
         
-        <!-- Calculator Selector Tabs -->
-        <div class="flex flex-wrap gap-2 pb-6 border-b border-slate-800/80 mb-8" id="calcTabs">
-          <button onclick="switchTab('ckd')" id="tab-ckd" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-clinical-cyan text-slate-950 shadow-md shadow-cyan-500/20">
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-2 pb-6 border-b border-med-border mb-8" id="calcTabs">
+          <button onclick="switchTab('ckd')" id="tab-ckd" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-teal text-med-obsidian shadow-md shadow-med-teal/20">
             وظائف الكلى (CKD-EPI 2021)
           </button>
-          <button onclick="switchTab('cha2ds2')" id="tab-cha2ds2" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300">
-            السكتة الدماغية والقلب (CHA2DS2-VA)
+          <button onclick="switchTab('cha2ds2')" id="tab-cha2ds2" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-elevated hover:bg-med-border text-med-muted">
+            السكتة الدماغية (CHA2DS2-VA)
           </button>
-          <button onclick="switchTab('pediatric')" id="tab-pediatric" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300">
+          <button onclick="switchTab('pediatric')" id="tab-pediatric" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-elevated hover:bg-med-border text-med-muted">
             أمان جرعات الأطفال (Zero Overdose)
           </button>
-          <button onclick="switchTab('meld')" id="tab-meld" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300">
+          <button onclick="switchTab('meld')" id="tab-meld" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-elevated hover:bg-med-border text-med-muted">
             فشل الكبد والزراعة (MELD-Na)
           </button>
-          <button onclick="switchTab('sofa')" id="tab-sofa" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300">
+          <button onclick="switchTab('sofa')" id="tab-sofa" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-elevated hover:bg-med-border text-med-muted">
             تعفن الدم في العناية (SOFA Score)
           </button>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          <!-- LEFT/TOP: Controls Panel (Cols 7) -->
+          <!-- Controls Panel -->
           <div class="lg:col-span-7 space-y-6">
             
             <!-- CKD PANEL -->
             <div id="panel-ckd" class="space-y-6">
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">العمر (Age):</label>
-                  <span id="ckd-age-val" class="font-mono text-clinical-cyan text-sm font-bold">54 سنة</span>
+                  <span id="ckd-age-val" class="font-mono text-med-teal text-sm font-bold">54 سنة</span>
                 </div>
-                <input type="range" id="ckd-age" min="18" max="95" value="54" oninput="runLiveCKD()" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="ckd-age" min="18" max="95" value="54" oninput="runLiveCKD()" class="w-full accent-[#00E5C3] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
 
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">الكرياتينين في الدم (Serum Creatinine):</label>
-                  <span id="ckd-scr-val" class="font-mono text-clinical-cyan text-sm font-bold">1.4 mg/dL</span>
+                  <span id="ckd-scr-val" class="font-mono text-med-teal text-sm font-bold">1.4 mg/dL</span>
                 </div>
-                <input type="range" id="ckd-scr" min="0.4" max="10.0" step="0.1" value="1.4" oninput="runLiveCKD()" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="ckd-scr" min="0.4" max="10.0" step="0.1" value="1.4" oninput="runLiveCKD()" class="w-full accent-[#00E5C3] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
 
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <label class="text-xs font-bold text-white block mb-3">الجنس البيولوجي (Biological Sex):</label>
                 <div class="grid grid-cols-2 gap-3">
-                  <button type="button" onclick="setCKDSex('female')" id="ckd-sex-female" class="py-2.5 rounded-xl border border-clinical-cyan bg-cyan-500/10 text-clinical-cyan text-xs font-bold transition">أنثى (Female)</button>
-                  <button type="button" onclick="setCKDSex('male')" id="ckd-sex-male" class="py-2.5 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold transition">ذكر (Male)</button>
+                  <button type="button" onclick="setCKDSex('female')" id="ckd-sex-female" class="py-2.5 rounded-xl border border-med-teal bg-med-teal/10 text-med-teal text-xs font-bold transition">أنثى (Female)</button>
+                  <button type="button" onclick="setCKDSex('male')" id="ckd-sex-male" class="py-2.5 rounded-xl border border-med-border bg-med-panel text-med-muted text-xs font-bold transition">ذكر (Male)</button>
                 </div>
               </div>
             </div>
 
             <!-- CHA2DS2-VA PANEL -->
             <div id="panel-cha2ds2" class="space-y-4 hidden">
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">العمر (Age):</label>
-                  <span id="af-age-val" class="font-mono text-clinical-cyan text-sm font-bold">72 سنة</span>
+                  <span id="af-age-val" class="font-mono text-med-teal text-sm font-bold">72 سنة</span>
                 </div>
-                <input type="range" id="af-age" min="40" max="95" value="72" oninput="runLiveCHA2DS2()" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="af-age" min="40" max="95" value="72" oninput="runLiveCHA2DS2()" class="w-full accent-[#00E5C3] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
 
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60 space-y-3">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border space-y-3">
                 <label class="text-xs font-bold text-white block">عوامل الخطورة المرافقة (ESC 2024):</label>
-                <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-300">
-                  <input type="checkbox" id="af-htn" checked onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-cyan-400 rounded">
+                <label class="flex items-center gap-3 cursor-pointer text-xs text-med-text">
+                  <input type="checkbox" id="af-htn" checked onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-[#00E5C3] rounded">
                   <span>ارتفاع ضغط الدم (Hypertension) [+1]</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-300">
-                  <input type="checkbox" id="af-dm" checked onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-cyan-400 rounded">
+                <label class="flex items-center gap-3 cursor-pointer text-xs text-med-text">
+                  <input type="checkbox" id="af-dm" checked onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-[#00E5C3] rounded">
                   <span>داء السكري (Diabetes Mellitus) [+1]</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-300">
-                  <input type="checkbox" id="af-stroke" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-cyan-400 rounded">
+                <label class="flex items-center gap-3 cursor-pointer text-xs text-med-text">
+                  <input type="checkbox" id="af-stroke" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-[#00E5C3] rounded">
                   <span>جلطة دماغية سابقة أو نقص تروية مؤقت (Prior Stroke / TIA) [+2]</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-300">
-                  <input type="checkbox" id="af-vasc" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-cyan-400 rounded">
+                <label class="flex items-center gap-3 cursor-pointer text-xs text-med-text">
+                  <input type="checkbox" id="af-vasc" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-[#00E5C3] rounded">
                   <span>مرض وعائي محيطي أو شرياني (Vascular Disease) [+1]</span>
                 </label>
-                <label class="flex items-center gap-3 cursor-pointer text-xs text-slate-300">
-                  <input type="checkbox" id="af-hf" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-cyan-400 rounded">
+                <label class="flex items-center gap-3 cursor-pointer text-xs text-med-text">
+                  <input type="checkbox" id="af-hf" onchange="runLiveCHA2DS2()" class="w-4 h-4 accent-[#00E5C3] rounded">
                   <span>قصور عضلة القلب الاحتقاني (Heart Failure) [+1]</span>
                 </label>
               </div>
@@ -449,49 +460,49 @@
 
             <!-- PEDIATRIC PANEL -->
             <div id="panel-pediatric" class="space-y-6 hidden">
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">وزن الطفل (Weight in kg):</label>
-                  <span id="ped-wt-val" class="font-mono text-clinical-cyan text-sm font-bold">50 كجم</span>
+                  <span id="ped-wt-val" class="font-mono text-med-teal text-sm font-bold">50 كجم</span>
                 </div>
-                <input type="range" id="ped-wt" min="5" max="80" value="50" oninput="runLivePediatric()" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="ped-wt" min="5" max="80" value="50" oninput="runLivePediatric()" class="w-full accent-[#00E5C3] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
 
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">الجرعة المقترحة لكل كيلوجرام (Dose per kg):</label>
-                  <span id="ped-dose-val" class="font-mono text-clinical-cyan text-sm font-bold">25 mg/kg</span>
+                  <span id="ped-dose-val" class="font-mono text-med-teal text-sm font-bold">25 mg/kg</span>
                 </div>
-                <input type="range" id="ped-dose" min="5" max="50" value="25" oninput="runLivePediatric()" class="w-full accent-cyan-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="ped-dose" min="5" max="50" value="25" oninput="runLivePediatric()" class="w-full accent-[#00E5C3] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
 
-              <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+              <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                 <div class="flex justify-between items-center mb-2">
                   <label class="text-xs font-bold text-white">السقف الأقصى لجرعة البالغين (Adult Max Ceiling):</label>
-                  <span id="ped-cap-val" class="font-mono text-clinical-rose text-sm font-bold">1000 mg</span>
+                  <span id="ped-cap-val" class="font-mono text-med-crimson text-sm font-bold">1000 mg</span>
                 </div>
-                <input type="range" id="ped-cap" min="500" max="2000" step="100" value="1000" oninput="runLivePediatric()" class="w-full accent-rose-400 bg-slate-800 h-2 rounded-lg cursor-pointer">
+                <input type="range" id="ped-cap" min="500" max="2000" step="100" value="1000" oninput="runLivePediatric()" class="w-full accent-[#F43F5E] bg-med-elevated h-2 rounded-lg cursor-pointer">
               </div>
             </div>
 
             <!-- MELD PANEL -->
             <div id="panel-meld" class="space-y-4 hidden">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">البيليروبين الكلي (Bilirubin mg/dL):</label>
-                  <input type="number" id="meld-bili" value="3.5" step="0.1" oninput="runLiveMELD()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="meld-bili" value="3.5" step="0.1" oninput="runLiveMELD()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">السيولة (INR):</label>
-                  <input type="number" id="meld-inr" value="2.1" step="0.1" oninput="runLiveMELD()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="meld-inr" value="2.1" step="0.1" oninput="runLiveMELD()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">الكرياتينين (Creatinine mg/dL):</label>
-                  <input type="number" id="meld-cr" value="1.8" step="0.1" oninput="runLiveMELD()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="meld-cr" value="1.8" step="0.1" oninput="runLiveMELD()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">الصوديوم (Sodium mEq/L):</label>
-                  <input type="number" id="meld-na" value="128" step="1" oninput="runLiveMELD()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="meld-na" value="128" step="1" oninput="runLiveMELD()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
               </div>
             </div>
@@ -499,66 +510,61 @@
             <!-- SOFA PANEL -->
             <div id="panel-sofa" class="space-y-4 hidden">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">الصفائح الدموية (Platelets K/uL):</label>
-                  <input type="number" id="sofa-plt" value="45" step="5" oninput="runLiveSOFA()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="sofa-plt" value="45" step="5" oninput="runLiveSOFA()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">البيليروبين (Bilirubin mg/dL):</label>
-                  <input type="number" id="sofa-bili" value="2.5" step="0.1" oninput="runLiveSOFA()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="sofa-bili" value="2.5" step="0.1" oninput="runLiveSOFA()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">الكرياتينين (Creatinine mg/dL):</label>
-                  <input type="number" id="sofa-cr" value="2.2" step="0.1" oninput="runLiveSOFA()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="sofa-cr" value="2.2" step="0.1" oninput="runLiveSOFA()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-950/50 border border-slate-800/60">
+                <div class="p-4 rounded-2xl bg-med-obsidian border border-med-border">
                   <label class="text-xs font-bold text-white block mb-1">نسبة PaO2/FiO2:</label>
-                  <input type="number" id="sofa-pf" value="180" step="10" oninput="runLiveSOFA()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 font-mono text-cyan-400 text-sm">
+                  <input type="number" id="sofa-pf" value="180" step="10" oninput="runLiveSOFA()" class="w-full bg-med-panel border border-med-border rounded-lg p-2 font-mono text-med-teal text-sm">
                 </div>
               </div>
             </div>
 
           </div>
 
-          <!-- RIGHT/BOTTOM: Real-Time Results & Animated Gauge HUD (Cols 5) -->
-          <div class="lg:col-span-5 double-bezel rounded-2xl p-6 bg-slate-950/80 border border-clinical-cyan/30">
+          <!-- Animated Gauge & Code Output HUD -->
+          <div class="lg:col-span-5 clinical-surface rounded-2xl p-6 bg-med-obsidian/90 border border-med-teal/30">
             
-            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
-              <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Deterministic Output</span>
-              <span id="sim-status-tag" class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] font-mono text-clinical-cyan font-bold">
+            <div class="flex items-center justify-between pb-4 border-b border-med-border mb-6">
+              <span class="text-xs font-mono font-bold text-med-muted uppercase tracking-wider">Deterministic Output</span>
+              <span id="sim-status-tag" class="px-2.5 py-1 rounded-full bg-med-teal/10 border border-med-teal/30 text-[10px] font-mono text-med-teal font-bold">
                 Formula Verified
               </span>
             </div>
 
-            <!-- Circular Gauge Visualization -->
+            <!-- Circular Gauge -->
             <div class="flex flex-col items-center justify-center my-4">
               <div class="relative w-44 h-44">
                 <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="#1E293B" stroke-width="8"></circle>
-                  <circle id="gaugeArc" class="gauge-circle" cx="50" cy="50" r="42" fill="none" stroke="#00F0FF" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="132" stroke-linecap="round"></circle>
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#18263C" stroke-width="8"></circle>
+                  <circle id="gaugeArc" class="gauge-circle" cx="50" cy="50" r="42" fill="none" stroke="#00E5C3" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="132" stroke-linecap="round"></circle>
                 </svg>
                 <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                   <span id="gaugeValue" class="text-4xl font-black font-mono text-white tracking-tight">44.8</span>
-                  <span id="gaugeUnit" class="text-[10px] font-mono text-slate-400 mt-0.5">mL/min/1.73m²</span>
+                  <span id="gaugeUnit" class="text-[10px] font-mono text-med-muted mt-0.5">mL/min/1.73m²</span>
                 </div>
               </div>
 
-              <!-- Main Tier Badge -->
-              <div id="sim-stage-badge" class="mt-4 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-bold text-center">
+              <div id="sim-stage-badge" class="mt-4 px-4 py-1.5 rounded-full bg-med-amber/10 border border-med-amber/30 text-med-amber font-mono text-xs font-bold text-center">
                 Stage G3b (Moderate-Severe)
               </div>
             </div>
 
-            <!-- Detailed Explanation Box -->
-            <div class="mt-6 p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 leading-relaxed" id="sim-explanation">
-              <strong>التوصية السريرية (KDIGO 2024):</strong><br>
-              معدل الترشيح الكبيبي يشير إلى انخفاض متوسط إلى شديد في وظائف الكلى. يوصى فوراً بتعديل جرعات الأدوية المطروحة كلوياً، وتجنب مضادات الالتهاب غير الستيرويدية (NSAIDs).
-            </div>
+            <div class="mt-6 p-4 rounded-xl bg-med-panel border border-med-border text-xs text-med-text leading-relaxed" id="sim-explanation"></div>
 
-            <!-- Generated Tool Call Preview -->
-            <div class="mt-4 pt-3 border-t border-slate-800 font-mono text-[10px] text-slate-500">
-              <div class="text-slate-400 mb-1">Generated JSON Tool Call:</div>
-              <pre id="sim-tool-call" class="p-2 bg-slate-950 rounded text-cyan-400 overflow-x-auto text-[10px]">{"calculator": "ckd_epi_2021", "egfr": 44.8}</pre>
+            <!-- Code Syntax Tool Call Output -->
+            <div class="mt-4 pt-3 border-t border-med-border font-mono text-[10px] text-med-muted">
+              <div class="text-med-blue mb-1">Generated JSON Tool Call:</div>
+              <pre id="sim-tool-call" class="p-3 bg-med-obsidian border border-med-border rounded-lg text-med-teal overflow-x-auto text-[10px]" dir="ltr"></pre>
             </div>
 
           </div>
@@ -570,75 +576,74 @@
     </div>
   </section>
 
-  <!-- SECTION: BENCHMARKS & MULTI-MODEL MATRIX (المعايرة ومقارنة النماذج) -->
-  <section id="benchmarks" class="py-24 px-4 md:px-6 relative z-10 border-t border-slate-800/60">
+  <!-- SECTION: BENCHMARKS MATRIX -->
+  <section id="benchmarks" class="py-24 px-4 md:px-6 relative z-10 border-t border-med-border">
     <div class="max-w-6xl mx-auto">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-clinical-cyan text-xs font-mono font-bold uppercase tracking-wider mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-med-teal/10 border border-med-teal/30 text-med-teal text-xs font-mono font-bold uppercase tracking-wider mb-3">
           Audited Benchmarks
         </div>
         <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
           المعايرة السريرية الفعلية بالأدلة
         </h2>
-        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-          نتائج اختبارات حقيقية مجردة من أي مجاملة. مقارنة دقة الحسابات الطبية ومعدل الأمان بين MedOrqis-LLM وأكبر النماذج العالمية.
+        <p class="text-med-muted text-sm md:text-base leading-relaxed">
+          مقارنة برمجية وسريرية مجردة من أي مجاملة بين دقة محرك MedOrqis-LLM الحتمي والنماذج اللغوية العامة.
         </p>
       </div>
 
-      <!-- Comparison Matrix -->
-      <div class="double-bezel rounded-3xl overflow-hidden p-6 md:p-8">
+      <div class="clinical-surface rounded-3xl overflow-hidden p-6 md:p-8">
         <div class="overflow-x-auto">
           <table class="w-full text-right text-xs md:text-sm">
             <thead>
-              <tr class="border-b border-slate-800 text-slate-400 font-mono text-xs">
-                <th class="py-4 px-4 text-white font-bold">المعيار السريري</th>
-                <th class="py-4 px-4 text-clinical-cyan font-bold font-en text-center">MedOrqis-LLM</th>
+              <tr class="border-b border-med-border text-med-muted font-mono text-xs">
+                <th class="py-4 px-4 text-white font-bold">المعيار الهندسي والسريري</th>
+                <th class="py-4 px-4 text-med-teal font-bold font-en text-center">MedOrqis-LLM</th>
                 <th class="py-4 px-4 text-center">GPT-4o</th>
                 <th class="py-4 px-4 text-center">Claude 3.5 Sonnet</th>
                 <th class="py-4 px-4 text-center">Llama-3-70B</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-800/60 font-mono">
+            <tbody class="divide-y divide-med-border font-mono">
               <tr>
                 <td class="py-4 px-4 font-sans text-white font-semibold">
                   معدل الخطأ الحسابي (CKD-EPI / MELD / CrCl)
-                  <div class="text-[11px] text-slate-500 font-sans">الانحراف الرياضي عن الحقيقة الفسيولوجية</div>
+                  <div class="text-[11px] text-med-muted font-sans">الانحراف الرياضي عن الحقيقة الفسيولوجية</div>
                 </td>
-                <td class="py-4 px-4 text-center font-bold text-clinical-cyan bg-cyan-500/5">0.00% (حتمي)</td>
-                <td class="py-4 px-4 text-center text-rose-400">24.8%</td>
-                <td class="py-4 px-4 text-center text-rose-400">18.2%</td>
-                <td class="py-4 px-4 text-center text-rose-400">31.4%</td>
+                <td class="py-4 px-4 text-center font-bold text-med-teal bg-med-teal/5">0.00% (حتمي)</td>
+                <td class="py-4 px-4 text-center text-med-crimson">24.8%</td>
+                <td class="py-4 px-4 text-center text-med-crimson">18.2%</td>
+                <td class="py-4 px-4 text-center text-med-crimson">31.4%</td>
               </tr>
               <tr>
                 <td class="py-4 px-4 font-sans text-white font-semibold">
                   التزام سقف جرعات الأطفال (Zero Overdose)
-                  <div class="text-[11px] text-slate-500 font-sans">منع تخطي الجرعة القصوى للبالغين للطفل</div>
+                  <div class="text-[11px] text-med-muted font-sans">منع تخطي الجرعة القصوى للبالغين للطفل</div>
                 </td>
-                <td class="py-4 px-4 text-center font-bold text-clinical-emerald bg-emerald-500/5">100.0% (آمن)</td>
-                <td class="py-4 px-4 text-center text-rose-400">58.0% (فشل)</td>
-                <td class="py-4 px-4 text-center text-rose-400">69.0% (فشل)</td>
-                <td class="py-4 px-4 text-center text-rose-400">52.0% (فشل)</td>
+                <td class="py-4 px-4 text-center font-bold text-med-mint bg-med-mint/5">100.0% (آمن)</td>
+                <td class="py-4 px-4 text-center text-med-crimson">58.0% (فشل)</td>
+                <td class="py-4 px-4 text-center text-med-crimson">69.0% (فشل)</td>
+                <td class="py-4 px-4 text-center text-med-crimson">52.0% (فشل)</td>
               </tr>
               <tr>
                 <td class="py-4 px-4 font-sans text-white font-semibold">
                   دقة صياغة استدعاء الأدوات (Tool Calling Syntax)
-                  <div class="text-[11px] text-slate-500 font-sans">إنتاج استدعاء JSON سليم بدون أخطاء تشريحية</div>
+                  <div class="text-[11px] text-med-muted font-sans">إنتاج استدعاء JSON سليم بدون أخطاء</div>
                 </td>
-                <td class="py-4 px-4 text-center font-bold text-white bg-white/5">100.0%</td>
-                <td class="py-4 px-4 text-center text-slate-300">89.5%</td>
-                <td class="py-4 px-4 text-center text-slate-300">92.0%</td>
-                <td class="py-4 px-4 text-center text-slate-300">84.5%</td>
+                <td class="py-4 px-4 text-center font-bold text-white bg-med-elevated/40">100.0%</td>
+                <td class="py-4 px-4 text-center text-med-muted">89.5%</td>
+                <td class="py-4 px-4 text-center text-med-muted">92.0%</td>
+                <td class="py-4 px-4 text-center text-med-muted">84.5%</td>
               </tr>
               <tr>
                 <td class="py-4 px-4 font-sans text-white font-semibold">
                   حجم الذاكرة الرسومية للتشغيل المحلي (Air-Gapped)
-                  <div class="text-[11px] text-slate-500 font-sans">إمكانية العمل داخل شبكة المستشفى المعزولة</div>
+                  <div class="text-[11px] text-med-muted font-sans">العمل داخل شبكة المستشفى المعزولة</div>
                 </td>
-                <td class="py-4 px-4 text-center font-bold text-clinical-cyan bg-cyan-500/5">7.68 GB (T4 / RTX)</td>
-                <td class="py-4 px-4 text-center text-slate-400">Cloud Only</td>
-                <td class="py-4 px-4 text-center text-slate-400">Cloud Only</td>
-                <td class="py-4 px-4 text-center text-slate-400">140+ GB VRAM</td>
+                <td class="py-4 px-4 text-center font-bold text-med-blue bg-med-blue/5">7.68 GB (T4 / RTX)</td>
+                <td class="py-4 px-4 text-center text-med-muted">Cloud Only</td>
+                <td class="py-4 px-4 text-center text-med-muted">Cloud Only</td>
+                <td class="py-4 px-4 text-center text-med-muted">140+ GB VRAM</td>
               </tr>
             </tbody>
           </table>
@@ -648,74 +653,69 @@
     </div>
   </section>
 
-  <!-- SECTION: REAL-WORLD CLINICAL DATASETS (مصفوفة البيانات السريرية الحقيقية) -->
-  <section id="datasets" class="py-24 px-4 md:px-6 relative z-10 border-t border-slate-800/60 bg-slate-950/40">
+  <!-- SECTION: REAL-WORLD CLINICAL DATASETS -->
+  <section id="datasets" class="py-24 px-4 md:px-6 relative z-10 border-t border-med-border bg-med-panel/30">
     <div class="max-w-6xl mx-auto">
       
       <div class="text-center max-w-3xl mx-auto mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase tracking-wider mb-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-med-blue/10 border border-med-blue/30 text-med-blue text-xs font-mono font-bold uppercase tracking-wider mb-3">
           Real Clinical Datasets
         </div>
         <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
           بيانات سريرية حقيقية 100%
         </h2>
-        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-          مشروع MedOrqis لا يعتمد على أرقام مصطنعة. تم تدريب ومعايرة النموذج على سجلات العناية المركزة والمستشفيات الحقيقية المعتمدة عالمياً.
+        <p class="text-med-muted text-sm md:text-base leading-relaxed">
+          تم بناء معالجات برمجية معيارية لربط النموذج مباشرة بأشهر قواعد البيانات السريرية الحقيقية المعتمدة دولياً.
         </p>
       </div>
 
-      <!-- Bento Grid 4 Pillars -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
-        <!-- Pillar 1: MIMIC-IV Demo -->
-        <div class="double-bezel rounded-2xl p-6 relative group hover:border-clinical-cyan transition-all">
-          <div class="text-[10px] font-mono text-clinical-cyan uppercase tracking-wider mb-2 font-bold">PILLAR 01</div>
+        <div class="clinical-surface rounded-2xl p-6 hover:border-med-teal transition-all">
+          <div class="text-[10px] font-mono text-med-teal uppercase tracking-wider mb-2 font-bold">PILLAR 01</div>
           <h3 class="text-lg font-bold text-white mb-2">MIMIC-IV Demo (v2.2)</h3>
           <div class="text-3xl font-black text-white font-mono my-2">1,058</div>
-          <p class="text-xs text-slate-400 leading-relaxed font-light mb-4">
-            حالات تنويم سريرية حقيقية لمرضى العناية المركزة تشمل الكرياتينين، تحاليل وظائف الكبد، ومرضى تعفن الدم.
+          <p class="text-xs text-med-muted leading-relaxed font-light mb-4">
+            حالات تنويم سريرية حقيقية لمرضى العناية المركزة تشمل الكرياتينين، وظائف الكبد، وتسمم الدم.
           </p>
-          <div class="pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-500">
+          <div class="pt-3 border-t border-med-border text-[11px] font-mono text-med-teal">
             MIT PhysioNet • Integrated
           </div>
         </div>
 
-        <!-- Pillar 2: eICU Demo -->
-        <div class="double-bezel rounded-2xl p-6 relative group hover:border-emerald-400 transition-all">
-          <div class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider mb-2 font-bold">PILLAR 02</div>
+        <div class="clinical-surface rounded-2xl p-6 hover:border-med-mint transition-all">
+          <div class="text-[10px] font-mono text-med-mint uppercase tracking-wider mb-2 font-bold">PILLAR 02</div>
           <h3 class="text-lg font-bold text-white mb-2">eICU Demo (v2.0.1)</h3>
-          <div class="text-3xl font-black text-emerald-400 font-mono my-2">2,520</div>
-          <p class="text-xs text-slate-400 leading-relaxed font-light mb-4">
-            بيانات متعددة المستشفيات والمراكز تضم 1,841 مريضاً مع القياسات الحيوية المستمرة ومسارات العناية الفائقة.
+          <div class="text-3xl font-black text-med-mint font-mono my-2">2,520</div>
+          <p class="text-xs text-med-muted leading-relaxed font-light mb-4">
+            بيانات متعددة المستشفيات تضم 1,841 مريضاً مع القياسات الحيوية ومسارات العناية الفائقة.
           </p>
-          <div class="pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-500">
+          <div class="pt-3 border-t border-med-border text-[11px] font-mono text-med-mint">
             Multi-Center ICU • Ready
           </div>
         </div>
 
-        <!-- Pillar 3: PMC-Patients -->
-        <div class="double-bezel rounded-2xl p-6 relative group hover:border-clinical-blue transition-all">
-          <div class="text-[10px] font-mono text-clinical-blue uppercase tracking-wider mb-2 font-bold">PILLAR 03</div>
+        <div class="clinical-surface rounded-2xl p-6 hover:border-med-blue transition-all">
+          <div class="text-[10px] font-mono text-med-blue uppercase tracking-wider mb-2 font-bold">PILLAR 03</div>
           <h3 class="text-lg font-bold text-white mb-2">PMC-Patients</h3>
-          <div class="text-3xl font-black text-clinical-blue font-mono my-2">167,000</div>
-          <p class="text-xs text-slate-400 leading-relaxed font-light mb-4">
-            أضخم مجموعة ملخصات حالات سريرية حقيقية مستخلصة من PubMed Central للاستدلال السريري ونماذج RAG.
+          <div class="text-3xl font-black text-med-blue font-mono my-2">167,000</div>
+          <p class="text-xs text-med-muted leading-relaxed font-light mb-4">
+            أضخم مجموعة ملخصات حالات سريرية حقيقية مستخلصة من PubMed Central للاستدلال الطبي.
           </p>
-          <div class="pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-500">
+          <div class="pt-3 border-t border-med-border text-[11px] font-mono text-med-blue">
             PubMed Central • Corpus
           </div>
         </div>
 
-        <!-- Pillar 4: Curated Guidelines -->
-        <div class="double-bezel rounded-2xl p-6 relative group hover:border-amber-400 transition-all">
-          <div class="text-[10px] font-mono text-amber-400 uppercase tracking-wider mb-2 font-bold">PILLAR 04</div>
-          <h3 class="text-lg font-bold text-white mb-2">Curated Scenarios</h3>
-          <div class="text-3xl font-black text-amber-400 font-mono my-2">200</div>
-          <p class="text-xs text-slate-400 leading-relaxed font-light mb-4">
-            سيناريوهات حرجة معتمدة تشمل معايير بيرز 2023 لكبار السن، وتفاعلات الأدوية المميتة، واستشارات EHR.
+        <div class="clinical-surface rounded-2xl p-6 hover:border-med-amber transition-all">
+          <div class="text-[10px] font-mono text-med-amber uppercase tracking-wider mb-2 font-bold">PILLAR 04</div>
+          <h3 class="text-lg font-bold text-white mb-2">Curated & MIMIC-III</h3>
+          <div class="text-3xl font-black text-med-amber font-mono my-2">200+</div>
+          <p class="text-xs text-med-muted leading-relaxed font-light mb-4">
+            سيناريوهات حرجة معتمدة ومعالجات نصوص تقارير الخروج السريرية NOTEEVENTS.
           </p>
-          <div class="pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-500">
-            Beers 2023 • KDIGO • ESC
+          <div class="pt-3 border-t border-med-border text-[11px] font-mono text-med-amber">
+            Beers 2023 • NOTEEVENTS
           </div>
         </div>
 
@@ -724,22 +724,25 @@
     </div>
   </section>
 
-  <!-- SECTION: GOVERNANCE, AFFILIATION & CITATION -->
-  <section id="governance" class="py-24 px-4 md:px-6 relative z-10 border-t border-slate-800/60">
+  <!-- SECTION: GOVERNANCE & AFFILIATION -->
+  <section id="governance" class="py-24 px-4 md:px-6 relative z-10 border-t border-med-border">
     <div class="max-w-4xl mx-auto">
       
-      <div class="double-bezel rounded-3xl p-8 mb-12">
+      <div class="clinical-surface rounded-3xl p-8">
         <div class="flex items-center gap-3 mb-4">
-          <div class="w-3 h-3 rounded-full bg-clinical-cyan"></div>
+          <svg class="w-6 h-6 text-med-teal shrink-0" viewBox="0 0 40 40" fill="none">
+            <path d="M20 3 L34.7 11.5 V28.5 L20 37 L5.3 28.5 V11.5 Z" stroke="#00E5C3" stroke-width="2"/>
+            <path d="M14 20 H17 L19 14 L21 26 L23 18 L24.5 20 H26" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+          </svg>
           <h3 class="text-lg font-bold text-white">الحوكمة والاستشارات الصيدلانية والتكنولوجية</h3>
         </div>
-        <p class="text-sm text-slate-300 leading-relaxed mb-6 font-light">
-          تم تطوير وتصميم معمارية MedOrqis-LLM والأنظمة الحتمية بإشراف <strong class="text-white font-semibold">م. طارق محمد (طارق خلاف)</strong>، Lead AI Architect ومستشار النظم وتكنولوجيا المعلومات لدى <a href="https://www.eternalpharma.eg/?utm_source=medorqis-llm" target="_blank" class="text-clinical-cyan hover:underline font-semibold">Eternal Pharma</a> لضمان التوافق التام مع متطلبات الرقابة الدوائية (Pharmacovigilance) وحوكمة الذكاء الاصطناعي الطبي.
+        <p class="text-sm text-med-muted leading-relaxed mb-6 font-light">
+          تم تطوير وتصميم معمارية MedOrqis-LLM والأنظمة الحتمية بإشراف <strong class="text-white font-semibold">م. طارق محمد (طارق خلاف)</strong>، Lead AI Architect ومستشار النظم وتكنولوجيا المعلومات لدى <a href="https://www.eternalpharma.eg/?utm_source=medorqis-llm" target="_blank" class="text-med-teal hover:underline font-semibold">Eternal Pharma</a> لضمان التوافق التام مع متطلبات الرقابة الدوائية (Pharmacovigilance) وحوكمة الذكاء الاصطناعي الطبي.
         </p>
 
-        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800/80 font-mono text-xs text-slate-400" dir="ltr">
-          <div class="text-slate-500 text-[10px] mb-1">Persistent DOI (Zenodo):</div>
-          <a href="https://doi.org/10.5281/zenodo.23937802" target="_blank" class="text-clinical-cyan hover:underline">
+        <div class="p-4 rounded-xl bg-med-obsidian border border-med-border font-mono text-xs text-med-muted" dir="ltr">
+          <div class="text-[10px] mb-1">Persistent DOI (Zenodo):</div>
+          <a href="https://doi.org/10.5281/zenodo.23937802" target="_blank" class="text-med-teal hover:underline">
             https://doi.org/10.5281/zenodo.23937802
           </a>
         </div>
@@ -749,28 +752,32 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="py-12 px-4 md:px-6 border-t border-slate-900 bg-void text-xs text-slate-500 relative z-10 font-mono">
+  <footer class="py-12 px-4 md:px-6 border-t border-med-border bg-med-obsidian text-xs text-med-muted relative z-10 font-mono">
     <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-6">
       
       <div class="flex items-center gap-3">
+        <svg class="w-6 h-6" viewBox="0 0 40 40" fill="none">
+          <path d="M20 3 L34.7 11.5 V28.5 L20 37 L5.3 28.5 V11.5 Z" stroke="#00E5C3" stroke-width="2"/>
+          <path d="M14 20 H17 L19 14 L21 26 L23 18 L24.5 20 H26" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+        </svg>
         <span class="text-white font-bold font-en text-sm">MedOrqis-LLM</span>
         <span>•</span>
         <span>Apache 2.0 Open Source Medical AI</span>
       </div>
 
       <div class="flex flex-wrap items-center gap-6">
-        <a href="https://github.com/seotarek/medorqis-llm" target="_blank" class="hover:text-white transition">GitHub Repository</a>
-        <a href="https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions" target="_blank" class="hover:text-white transition">Hugging Face Dataset</a>
-        <a href="https://huggingface.co/seotarek/medorqis-llm" target="_blank" class="hover:text-white transition">Model Hub</a>
-        <a href="https://doi.org/10.5281/zenodo.23937802" target="_blank" class="hover:text-white transition">DOI Citation</a>
+        <a href="https://github.com/seotarek/medorqis-llm" target="_blank" class="hover:text-med-teal transition">GitHub Repository</a>
+        <a href="https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions" target="_blank" class="hover:text-med-teal transition">Hugging Face Dataset</a>
+        <a href="https://huggingface.co/seotarek/medorqis-llm" target="_blank" class="hover:text-med-teal transition">Model Hub</a>
+        <a href="https://doi.org/10.5281/zenodo.23937802" target="_blank" class="hover:text-med-teal transition">DOI Citation</a>
       </div>
 
     </div>
   </footer>
 
-  <!-- INTERACTIVE LOGIC & ANIMATED ECG SCRIPT -->
+  <!-- INTERACTIVE SCRIPT -->
   <script>
-    // 1. ANIMATED CARDIAC ECG RHYTHM ON CANVAS
+    // 1. LIVE ECG CANVAS
     const canvas = document.getElementById('ecgCanvas');
     const ctx = canvas.getContext('2d');
     let width, height, step = 0;
@@ -783,13 +790,13 @@
     resizeCanvas();
 
     function drawECG() {
-      ctx.fillStyle = 'rgba(5, 9, 20, 0.25)';
+      ctx.fillStyle = 'rgba(5, 10, 18, 0.28)';
       ctx.fillRect(0, 0, width, height);
 
       ctx.lineWidth = 2.2;
-      ctx.strokeStyle = '#00F0FF';
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = '#00F0FF';
+      ctx.strokeStyle = '#00E5C3';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#00E5C3';
 
       ctx.beginPath();
       const mid = height / 2;
@@ -799,26 +806,11 @@
         const t = (x + step) % 180;
         let y = mid;
 
-        // P Wave
-        if (t > 20 && t < 35) {
-          y -= Math.sin((t - 20) / 15 * Math.PI) * 5;
-        }
-        // Q Wave
-        else if (t >= 40 && t < 45) {
-          y += 4;
-        }
-        // R Wave (Tall Spike)
-        else if (t >= 45 && t < 55) {
-          y -= Math.sin((t - 45) / 10 * Math.PI) * 32;
-        }
-        // S Wave
-        else if (t >= 55 && t < 62) {
-          y += 7;
-        }
-        // T Wave
-        else if (t > 75 && t < 105) {
-          y -= Math.sin((t - 75) / 30 * Math.PI) * 8;
-        }
+        if (t > 20 && t < 35) y -= Math.sin((t - 20) / 15 * Math.PI) * 5;
+        else if (t >= 40 && t < 45) y += 4;
+        else if (t >= 45 && t < 55) y -= Math.sin((t - 45) / 10 * Math.PI) * 32;
+        else if (t >= 55 && t < 62) y += 7;
+        else if (t > 75 && t < 105) y -= Math.sin((t - 75) / 30 * Math.PI) * 8;
 
         if (x === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
@@ -830,7 +822,7 @@
     }
     requestAnimationFrame(drawECG);
 
-    // 2. SIMULATOR STATE & CALCULATORS
+    // 2. SIMULATOR ENGINE
     let activeTab = 'ckd';
     let ckdSex = 'female';
 
@@ -841,10 +833,10 @@
         const btn = document.getElementById('tab-' + t);
         const panel = document.getElementById('panel-' + t);
         if (t === tabId) {
-          btn.className = 'px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-clinical-cyan text-slate-950 shadow-md shadow-cyan-500/20';
+          btn.className = 'px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-teal text-med-obsidian shadow-md shadow-med-teal/20';
           panel.classList.remove('hidden');
         } else {
-          btn.className = 'px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-slate-900 hover:bg-slate-800 text-slate-300';
+          btn.className = 'px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-med-elevated hover:bg-med-border text-med-muted';
           panel.classList.add('hidden');
         }
       });
@@ -861,11 +853,11 @@
       const fBtn = document.getElementById('ckd-sex-female');
       const mBtn = document.getElementById('ckd-sex-male');
       if (sex === 'female') {
-        fBtn.className = 'py-2.5 rounded-xl border border-clinical-cyan bg-cyan-500/10 text-clinical-cyan text-xs font-bold transition';
-        mBtn.className = 'py-2.5 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold transition';
+        fBtn.className = 'py-2.5 rounded-xl border border-med-teal bg-med-teal/10 text-med-teal text-xs font-bold transition';
+        mBtn.className = 'py-2.5 rounded-xl border border-med-border bg-med-panel text-med-muted text-xs font-bold transition';
       } else {
-        mBtn.className = 'py-2.5 rounded-xl border border-clinical-cyan bg-cyan-500/10 text-clinical-cyan text-xs font-bold transition';
-        fBtn.className = 'py-2.5 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 text-xs font-bold transition';
+        mBtn.className = 'py-2.5 rounded-xl border border-med-teal bg-med-teal/10 text-med-teal text-xs font-bold transition';
+        fBtn.className = 'py-2.5 rounded-xl border border-med-border bg-med-panel text-med-muted text-xs font-bold transition';
       }
       runLiveCKD();
     }
@@ -881,14 +873,12 @@
       document.getElementById('sim-explanation').innerHTML = explanationText;
       document.getElementById('sim-tool-call').textContent = JSON.stringify(jsonOutput, null, 2);
 
-      // Arc calculation
       const pct = Math.max(0, Math.min(1, (val - min) / (max - min)));
       const arc = document.getElementById('gaugeArc');
       const totalLen = 264;
       arc.style.strokeDashoffset = totalLen - (totalLen * pct);
     }
 
-    // A. CKD-EPI 2021 Race-Free
     function runLiveCKD() {
       const age = parseFloat(document.getElementById('ckd-age').value);
       const scr = parseFloat(document.getElementById('ckd-scr').value);
@@ -908,27 +898,27 @@
       let stage, badgeClass, exp;
       if (egfr >= 90) {
         stage = 'Stage G1 (Normal / High: >= 90)';
-        badgeClass = 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+        badgeClass = 'bg-med-mint/10 border border-med-mint/30 text-med-mint';
         exp = '<strong>التقييم (KDIGO 2024):</strong> ترشيح طبيعي ممتاز. لا تتطلب الحالة تعديل الجرعات الكلوية.';
       } else if (egfr >= 60) {
         stage = 'Stage G2 (Mild Reduction: 60-89)';
-        badgeClass = 'bg-cyan-500/10 border border-cyan-500/30 text-clinical-cyan';
+        badgeClass = 'bg-med-teal/10 border border-med-teal/30 text-med-teal';
         exp = '<strong>التقييم:</strong> انخفاض طفيف في الترشيح. مأمون لأغلب الأدوية مع متابعة دورية للمرضى ذوي الخطورة.';
       } else if (egfr >= 45) {
         stage = 'Stage G3a (Mild-Moderate: 45-59)';
-        badgeClass = 'bg-amber-500/10 border border-amber-500/30 text-amber-400';
+        badgeClass = 'bg-med-amber/10 border border-med-amber/30 text-med-amber';
         exp = '<strong>تعديل سريري:</strong> انخفاض معتدل. يُنصح بمراجعة جرعات الأدوية المطروحة كلوياً كل 3-6 أشهر.';
       } else if (egfr >= 30) {
         stage = 'Stage G3b (Moderate-Severe: 30-44)';
-        badgeClass = 'bg-amber-500/10 border border-amber-500/30 text-amber-400';
+        badgeClass = 'bg-med-amber/10 border border-med-amber/30 text-med-amber';
         exp = '<strong>تنبيه سريري حرج:</strong> انخفاض متوسط إلى شديد. تعديل إلزامي لجرعات الميتفورمين والمضادات الحيوية، وتجنب الـ NSAIDs.';
       } else if (egfr >= 15) {
         stage = 'Stage G4 (Severe Reduction: 15-29)';
-        badgeClass = 'bg-rose-500/10 border border-rose-500/30 text-rose-400';
+        badgeClass = 'bg-med-crimson/10 border border-med-crimson/30 text-med-crimson';
         exp = '<strong>قصور كلوي حاد:</strong> تجهيز مسار الغسيل أو الزراعة، وحظر تام للأدوية السامة للكلى.';
       } else {
         stage = 'Stage G5 (Kidney Failure: < 15)';
-        badgeClass = 'bg-rose-500/20 border border-rose-500 text-rose-300 animate-pulse';
+        badgeClass = 'bg-med-crimson/20 border border-med-crimson text-med-crimson animate-pulse';
         exp = '<strong>فشل كلوي نهائي:</strong> يستدعي التدخل الفوري للغسيل الكلوي (Dialysis) أو زراعة الكلى.';
       }
 
@@ -940,7 +930,6 @@
       });
     }
 
-    // B. CHA2DS2-VA (ESC 2024 Guidelines)
     function runLiveCHA2DS2() {
       const age = parseInt(document.getElementById('af-age').value);
       document.getElementById('af-age-val').textContent = `${age} سنة`;
@@ -958,16 +947,16 @@
       let stage, badgeClass, exp;
       if (score === 0) {
         stage = 'Low Risk (Score: 0)';
-        badgeClass = 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+        badgeClass = 'bg-med-mint/10 border border-med-mint/30 text-med-mint';
         exp = '<strong>توصية ESC 2024:</strong> خطورة منخفضة جداً للإصابة بالسكتة. لا يوصى بمضادات التخثر الفموية (OAC).';
       } else if (score === 1) {
         stage = 'Intermediate Risk (Score: 1)';
-        badgeClass = 'bg-amber-500/10 border border-amber-500/30 text-amber-400';
-        exp = '<strong>توصية ESC 2024 (Class IIa):</strong> خطورة متوسطة. يوصى بدراسة بدء مضادات التخثر الفموية المباشرة (DOAC) بناءً على تقييم النزيف.';
+        badgeClass = 'bg-med-amber/10 border border-med-amber/30 text-med-amber';
+        exp = '<strong>توصية ESC 2024 (Class IIa):</strong> خطورة متوسطة. يوصى بدراسة بدء مضادات التخثر الفموية المباشرة (DOAC).';
       } else {
         stage = `High Stroke Risk (Score: ${score})`;
-        badgeClass = 'bg-rose-500/20 border border-rose-500 text-rose-300';
-        exp = '<strong>توصية إلزامية ESC 2024 (Class I):</strong> خطورة مرتفعة. البدء فوراً بمضادات التخثر الفموية المباشرة (DOAC مثل Apixaban أو Rivaroxaban).';
+        badgeClass = 'bg-med-crimson/20 border border-med-crimson text-med-crimson';
+        exp = '<strong>توصية إلزامية ESC 2024 (Class I):</strong> خطورة مرتفعة. البدء فوراً بمضادات التخثر الفموية المباشرة (DOAC).';
       }
 
       updateGauge(score, 0, 8, 'Points (ESC 2024)', stage, badgeClass, exp, {
@@ -978,7 +967,6 @@
       });
     }
 
-    // C. Pediatric Safety Ceiling Cap
     function runLivePediatric() {
       const wt = parseFloat(document.getElementById('ped-wt').value);
       const dose = parseFloat(document.getElementById('ped-dose').value);
@@ -995,11 +983,11 @@
       let stage, badgeClass, exp;
       if (isCapped) {
         stage = 'SAFETY CAP APPLIED (OVERDOSE BLOCKED)';
-        badgeClass = 'bg-rose-500/20 border border-rose-500 text-rose-300 font-bold';
+        badgeClass = 'bg-med-crimson/20 border border-med-crimson text-med-crimson font-bold';
         exp = `<strong>حماية صمام الأمان الفسيولوجي:</strong><br>الجرعة المحسوبة بالوزن (${rawDose} mg) تخطت سقف البالغين (${cap} mg). تم قص الجرعة حتمياً إلى <strong>${safeDose} mg</strong> لحظر التسمم.`;
       } else {
         stage = 'Within Normal Pediatric Range';
-        badgeClass = 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+        badgeClass = 'bg-med-mint/10 border border-med-mint/30 text-med-mint';
         exp = `<strong>جرعة آمنة:</strong> الجرعة المحسوبة بالوزن (${rawDose} mg) لم تتخط سقف البالغين المسموح به (${cap} mg).`;
       }
 
@@ -1012,7 +1000,6 @@
       });
     }
 
-    // D. MELD-Na
     function runLiveMELD() {
       const bili = Math.max(1.0, parseFloat(document.getElementById('meld-bili').value) || 1.0);
       const inr = Math.max(1.0, parseFloat(document.getElementById('meld-inr').value) || 1.0);
@@ -1029,15 +1016,15 @@
       let stage, badgeClass, exp;
       if (finalMeld >= 25) {
         stage = 'High Tier Transplant Priority';
-        badgeClass = 'bg-rose-500/20 border border-rose-500 text-rose-300';
-        exp = '<strong>تقييم UNOS/OPTN:</strong> درجة خطورة عالية جداً ونسبة وفيات 90 يوماً مرتفعة. يستدعي إدراجاً عاجلاً على قائمة زراعة الكبد.';
+        badgeClass = 'bg-med-crimson/20 border border-med-crimson text-med-crimson';
+        exp = '<strong>تقييم UNOS/OPTN:</strong> درجة خطورة عالية جداً ونسبة وفيات 90 يوماً مرتفعة. يستدعي إدراجاً عاجلاً لزراعة الكبد.';
       } else if (finalMeld >= 15) {
         stage = 'Moderate Priority Tier';
-        badgeClass = 'bg-amber-500/10 border border-amber-500/30 text-amber-400';
+        badgeClass = 'bg-med-amber/10 border border-med-amber/30 text-med-amber';
         exp = '<strong>تقييم متوسط:</strong> متابعة وظائف الكلى والأملاح وحساب درجة الاستقرار شهرياً.';
       } else {
         stage = 'Low 90-Day Mortality Risk';
-        badgeClass = 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+        badgeClass = 'bg-med-mint/10 border border-med-mint/30 text-med-mint';
         exp = '<strong>استقرار نسبي:</strong> استمرار العلاج الدوائي والمتابعة الروتينية.';
       }
 
@@ -1049,7 +1036,6 @@
       });
     }
 
-    // E. SOFA Score
     function runLiveSOFA() {
       const plt = parseFloat(document.getElementById('sofa-plt').value) || 150;
       const bili = parseFloat(document.getElementById('sofa-bili').value) || 1.0;
@@ -1065,15 +1051,15 @@
       let stage, badgeClass, exp;
       if (score >= 6) {
         stage = 'Severe Multi-Organ Dysfunction (ICU)';
-        badgeClass = 'bg-rose-500/20 border border-rose-500 text-rose-300 font-bold';
-        exp = '<strong>معايير Sepsis-3:</strong> قصور وظيفي حاد في أعضاء متعددة. تطبيق فوري لحزمة رعاية تعفن الدم (Surviving Sepsis Bundle).';
+        badgeClass = 'bg-med-crimson/20 border border-med-crimson text-med-crimson font-bold';
+        exp = '<strong>معايير Sepsis-3:</strong> قصور وظيفي حاد في أعضاء متعددة. تطبيق فوري لحزمة رعاية تعفن الدم.';
       } else if (score >= 2) {
         stage = 'Sepsis Organ Dysfunction Confirmed';
-        badgeClass = 'bg-amber-500/10 border border-amber-500/30 text-amber-400';
+        badgeClass = 'bg-med-amber/10 border border-med-amber/30 text-med-amber';
         exp = '<strong>اشتباه إنتان مؤكد:</strong> زيادة سكور SOFA بمقدار نقطتين أو أكثر تؤكد وجود تعفن دم سريري وفق Sepsis-3.';
       } else {
         stage = 'Baseline Organ Preservation';
-        badgeClass = 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400';
+        badgeClass = 'bg-med-mint/10 border border-med-mint/30 text-med-mint';
         exp = '<strong>استقرار:</strong> عدم وجود قصور عضوي معتبر.';
       }
 
@@ -1085,7 +1071,7 @@
       });
     }
 
-    // Initialize with CKD on page load
+    // Initialize
     runLiveCKD();
   </script>
 </body>
