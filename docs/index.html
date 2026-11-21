@@ -93,7 +93,7 @@
         <a href="#simulator" class="hover:text-clinical-cyan transition-colors duration-150">المختبر التفاعلي</a>
         <a href="#benchmarks" class="hover:text-white transition-colors duration-150">المعايرة الفعلية</a>
         <a href="#matrix" class="hover:text-white transition-colors duration-150">مصفوفة المقارنة</a>
-        <a href="#dataset" class="hover:text-white transition-colors duration-150">مستودع الحالات (200)</a>
+        <a href="#dataset" class="hover:text-white transition-colors duration-150">مستودع الحالات (1,258)</a>
         <a href="#architecture" class="hover:text-white transition-colors duration-150">المعمارية</a>
       </nav>
 
@@ -139,7 +139,7 @@
             النماذج اللغوية الطبية التقليدية تولد الأرقام بأسلوب احتمالي يسبب خطأً حسابياً يتراوح بين 15% و40% في معادلات وظائف الكلى وجرعات الأطفال وتفاعلات الأدوية الحرجة.
           </p>
           <p class="text-sm text-slate-400 leading-relaxed mb-8 font-light">
-            نموذج <strong class="text-white font-semibold">MedOrqis-LLM (ميد أوركيس)</strong> يدمج الفهم اللغوي السريري للشكاوى واللهجات العربية مع محرك استدعاء الأدوات الحتمية (Deterministic Tool-Calling). النتيجة: <strong class="text-clinical-cyan font-mono">0.00% خطأ حسابي</strong>، <strong class="text-clinical-emerald font-mono">100.0% التزام بسقف جرعات الأطفال</strong>، وتدريب كامل على <strong class="text-white font-mono">200 سيناريو سريري معتمد</strong>.
+            نموذج <strong class="text-white font-semibold">MedOrqis-LLM (ميد أوركيس)</strong> يدمج الفهم اللغوي السريري للشكاوى واللهجات العربية مع محرك استدعاء الأدوات الحتمية (Deterministic Tool-Calling). النتيجة: <strong class="text-clinical-cyan font-mono">0.00% خطأ حسابي</strong>، <strong class="text-clinical-emerald font-mono">100.0% التزام بسقف جرعات الأطفال</strong>، وتدريب كامل على <strong class="text-white font-mono">1,258 سجلاً سريرياً حقيقياً ومعتمداً</strong> (بما في ذلك 1,058 حالة حقيقية مستخرجة مباشرة من قاعدة بيانات MIMIC-IV السريرية).
           </p>
 
           <!-- Action Buttons -->
@@ -151,7 +151,7 @@
               قراءة التوثيق والبيانات الكاملة (About)
             </a>
             <a href="https://huggingface.co/datasets/seotarek/medorqis-clinical-instructions" target="_blank" class="px-6 py-3.5 border border-surface-border bg-surface-subtle hover:bg-surface-elevated text-slate-400 hover:text-white transition duration-150 font-mono" dir="ltr">
-              200-Case HF Dataset
+              1,258-Case HF Dataset
             </a>
           </div>
         </div>
@@ -174,8 +174,8 @@
 
           <div class="border border-surface-border bg-surface-card p-4">
             <div class="text-slate-500 text-[10px] uppercase tracking-wider mb-1">Clinical Gold Records</div>
-            <div class="text-3xl font-black text-clinical-blue">200</div>
-            <div class="text-[11px] text-slate-400 mt-1 font-sans">EHR, Guidelines, Multi-Dialect</div>
+            <div class="text-3xl font-black text-clinical-blue">1,258</div>
+            <div class="text-[11px] text-slate-400 mt-1 font-sans">MIMIC-IV (1,058) + Curated (200)</div>
             <div class="text-[10px] text-slate-500 mt-2 pt-2 border-t border-surface-border">Hugging Face Datasets Hub</div>
           </div>
 
@@ -219,12 +219,12 @@
 
         <div class="p-6 bg-surface-card border border-surface-border relative">
           <div class="w-8 h-8 rounded bg-clinical-emerald/10 border border-clinical-emerald/30 flex items-center justify-center font-mono text-xs font-bold text-clinical-emerald mb-4">02</div>
-          <h3 class="text-lg font-bold text-white mb-2">مجموعة بيانات من 200 سيناريو</h3>
+          <h3 class="text-lg font-bold text-white mb-2">مجموعة بيانات من 1,258 سجلاً حقيقياً</h3>
           <p class="text-xs text-slate-400 leading-relaxed font-light mb-4">
-            تغطي حالات كبار السن وفق معايير بيرز 2023 (Beers Criteria)، أمراض الكبد وحساب MELD-Na، تعفن الدم وفق Sepsis-3، طوارئ الغدد والسموم، وبيانات سجلات المستشفيات الحقيقية (EHR) المطهرة.
+            تضم 1,058 حالة حقيقية مستخرجة مباشرة من قاعدة بيانات MIMIC-IV السريرية (بيانات وتحاليل مرضى العناية المركزة والمستشفيات الحقيقية، الكرياتينين، أمراض الكبد وحساب MELD-Na، تعفن الدم وفق Sepsis-3) بالإضافة إلى 200 سيناريو علاجي وتأسيسي.
           </p>
           <div class="font-mono text-[11px] text-slate-500 bg-surface-root p-2 border border-surface-border" dir="ltr">
-            seotarek/medorqis-clinical-instructions
+            MIMIC-IV Demo v2.2 + seotarek/medorqis-clinical-instructions
           </div>
         </div>
 
@@ -244,11 +244,11 @@
       <!-- Dataset Breakdown Table -->
       <div class="bg-surface-card border border-surface-border p-6 mb-8">
         <h3 class="text-base font-bold text-white mb-4 flex items-center justify-between">
-          <span>توزيع محتوى مجموعة البيانات السريرية (200 سجل تدريبي)</span>
-          <span class="font-mono text-xs text-clinical-cyan">Version 2.0 (Audited)</span>
+          <span>توزيع محتوى مجموعة البيانات السريرية (1,258 سجلاً تدريبياً ومعايراً)</span>
+          <span class="font-mono text-xs text-clinical-cyan">Version 3.0 (MIMIC-IV Integrated)</span>
         </h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 font-mono text-xs text-center" dir="ltr">
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-3 font-mono text-xs text-center" dir="ltr">
           <div class="p-3 bg-surface-root border border-surface-border">
             <div class="text-slate-500 text-[10px]">CASES 001 - 010</div>
             <div class="text-lg font-bold text-white my-1">10 Cases</div>
@@ -262,17 +262,22 @@
           <div class="p-3 bg-surface-root border border-surface-border">
             <div class="text-slate-500 text-[10px]">CASES 051 - 100</div>
             <div class="text-lg font-bold text-clinical-blue my-1">50 Cases</div>
-            <div class="text-[11px] text-slate-400 font-sans">معالجة أخطاء الذكاء الاصطناعي المنشورة</div>
+            <div class="text-[11px] text-slate-400 font-sans">معالجة أخطاء الذكاء الاصطناعي</div>
           </div>
           <div class="p-3 bg-surface-root border border-surface-border">
             <div class="text-slate-500 text-[10px]">CASES 101 - 150</div>
             <div class="text-lg font-bold text-clinical-emerald my-1">50 Cases</div>
-            <div class="text-[11px] text-slate-400 font-sans">بيرز 2023، الكبد، وتعفن الدم والسموم</div>
+            <div class="text-[11px] text-slate-400 font-sans">بيرز 2023، الكبد، وتعفن الدم</div>
           </div>
           <div class="p-3 bg-surface-root border border-surface-border">
             <div class="text-slate-500 text-[10px]">CASES 151 - 200</div>
             <div class="text-lg font-bold text-clinical-amber my-1">50 Cases</div>
-            <div class="text-[11px] text-slate-400 font-sans">سجلات إلكترونية واستشارات مستشفيات EHR</div>
+            <div class="text-[11px] text-slate-400 font-sans">سجلات إلكترونية EHR</div>
+          </div>
+          <div class="p-3 bg-surface-root border border-clinical-cyan/40 bg-clinical-cyan/5">
+            <div class="text-clinical-cyan text-[10px] font-bold">MIMIC-IV REAL DATA</div>
+            <div class="text-lg font-black text-clinical-cyan my-1">1,058 Cases</div>
+            <div class="text-[11px] text-slate-300 font-sans">مرضى حقيقيون، تحاليل، ICU</div>
           </div>
         </div>
       </div>

@@ -46,35 +46,39 @@ license: apache-2.0
 multilinguality:
 - bilingual
 size_categories:
-- n<1K
+- 1K<n<10K
 source_datasets:
 - original
+- physionet/mimic-iv-demo
 task_categories:
 - text-generation
 - question-answering
 task_ids: []
-pretty_name: MedOrqis Clinical Instructions & Tool Calling
+pretty_name: MedOrqis Clinical Instructions & MIMIC-IV Real Data
 tags:
 - medical
 - clinical-reasoning
 - tool-calling
 - function-calling
 - arabic-medical
-- cardiology
+- mimic-iv
 - nephrology
-- pharmacology
+- hepatology
+- critical-care
 - safety-guardrails
 ---
 
-# MedOrqis Clinical Instructions & Tool Calling Dataset
+# MedOrqis Clinical Instructions & Tool Calling Dataset (1,258 Records)
 
 The official foundational instruction-tuning and function-calling dataset for the **MedOrqis Medical Foundation Model** (`seotarek/medorqis-karnak-40b-lora`), built on top of `Applied-Innovation-Center/Karnak-40B-v1.0` and `Karnak-6B-v1.0`.
 
 ## Key Highlights
 
-- **Bilingual (Arabic & English)**: Clinical scenarios encompassing Standard Medical Arabic, English, and regional dialect complaints (e.g., Egyptian colloquialisms).
+- **Bilingual (Arabic & English)**: Clinical scenarios encompassing Standard Medical Arabic, English, and regional dialect complaints.
+- **Real-World Clinical Data (MIMIC-IV Demo v2.2)**: 1,058 empirical clinical cases derived directly from authentic ICU and inpatient admissions with genuine lab values (serum creatinine, bilirubin, sodium, INR, platelets).
+- **Curated Clinical Scenarios**: 200 guideline-grounded scenarios across cardiology, nephrology, Beers 2023 geriatrics, emergency toxicology, and hospital EHR.
 - **Native Tool-Calling (<tool_call>)**: Formatted specifically for Karnak / Qwen ChatML tool schemas.
-- **Deterministic Clinical Grounding**: Prompts the LLM to invoke deterministic zero-token calculators rather than guessing mathematical clinical risk scores:
+- **Deterministic Clinical Grounding**: Prompts the LLM to invoke deterministic zero-token calculators rather than guessing mathematical clinical risk scores.
   - `cha2ds2_va_esc2024` (ESC 2024 Atrial Fibrillation Stroke Risk)
   - `ckd_epi_2021_egfr` (KDIGO 2024 Race-Free Renal Equation)
   - `bedside_schwartz_egfr` (Pediatric eGFR)
@@ -130,8 +134,8 @@ def upload_dataset():
     except Exception as e:
         print(f"[NOTE] create_repo notice: {e}")
 
-    # 2. Upload JSONL dataset (200 scenarios)
-    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (200 clinical scenarios)...")
+    # 2. Upload JSONL dataset (1,258 records)
+    print(f"[2/3] Uploading {LOCAL_DATASET_FILE} (1,258 clinical records)...")
     api.upload_file(
         path_or_fileobj=LOCAL_DATASET_FILE,
         path_in_repo="train.jsonl",
@@ -139,7 +143,7 @@ def upload_dataset():
         repo_type="dataset",
         token=HF_TOKEN
     )
-    print("[SUCCESS] train.jsonl (200 scenarios) uploaded successfully.")
+    print("[SUCCESS] train.jsonl (1,258 records) uploaded successfully.")
 
     # Remove root eval.jsonl if present to prevent PyArrow schema cast collisions
     try:

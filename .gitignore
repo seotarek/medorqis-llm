@@ -16,3 +16,6 @@ medorqis_karnak6b_checkpoints/
 .ipynb_checkpoints/
 *.log
 hf_space/
+
+data/
+dist-buddy/

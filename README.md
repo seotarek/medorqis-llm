@@ -167,7 +167,7 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ---
 
-## 🏛️ Clinical & Industry Affiliations
+##  Clinical & Industry Affiliations
 
 - **Lead AI Architect & Author**: **Eng. Tarek Mohamed (Tarek Khallaf)**  
   Lead Architect, MedOrqis-LLM | Senior IT & Systems Consultant @ **[Eternal Pharma](https://www.eternalpharma.eg/?utm_source=medorqis-llm)**
