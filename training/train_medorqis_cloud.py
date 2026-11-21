@@ -20,14 +20,22 @@ from transformers import (
 )
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, PeftModel
 
+import argparse
+
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument("--tier", choices=["enterprise", "public"], default=os.getenv("MEDORQIS_TIER", "enterprise"))
+args_cli, _ = parser.parse_known_args()
+
 HF_TOKEN = "".join(["hf_", "FOEwmPyJISOLLVSFfIDHoOgoDnjGRpTAmU"])
 BASE_MODEL_ID = "Applied-Innovation-Center/Karnak-6B-v1.0"
 DATASET_ID = "seotarek/medorqis-clinical-instructions"
-OUTPUT_REPO = "seotarek/medorqis-llm"
+IS_PRIVATE = (args_cli.tier == "enterprise")
+OUTPUT_REPO = "seotarek/medorqis-llm-enterprise" if IS_PRIVATE else "seotarek/medorqis-llm"
 LORA_SAVE_DIR = "./medorqis-llm-lora-final"
 
 print("=" * 70)
-print(" MEDORQIS-LLM — OFFICIAL CLOUD TRAINING & PUBLISHING PIPELINE")
+print(f" MEDORQIS-LLM — OFFICIAL CLOUD TRAINING PIPELINE [TIER: {args_cli.tier.upper()}]")
+print(f" Target Repository: {OUTPUT_REPO} (Private={IS_PRIVATE})")
 print("=" * 70)
 
 # 1. Load Tokenizer
@@ -244,20 +252,21 @@ class EpochPushCallback(TrainerCallback):
     Pushes the current trained adapter to Hugging Face at the end of every epoch.
     Ensures that if the session is interrupted, intermediate checkpoints are preserved live on HF.
     """
-    def __init__(self, output_repo, token):
+    def __init__(self, output_repo, token, is_private=True):
         self.output_repo = output_repo
         self.token = token
+        self.is_private = is_private
 
     def on_epoch_end(self, args, state, control, model=None, **kwargs):
         current_epoch = int(round(state.epoch)) if state.epoch else "unknown"
-        print(f"\n[AUTO-CHECKPOINT] Epoch {current_epoch} completed! Pushing adapter weights to Hugging Face ({self.output_repo})...")
+        print(f"\n[AUTO-CHECKPOINT] Epoch {current_epoch} completed! Pushing adapter weights to Hugging Face ({self.output_repo}, private={self.is_private})...")
         try:
             if model is not None:
                 model.push_to_hub(
                     self.output_repo,
                     commit_message=f"auto-checkpoint: epoch {current_epoch} completed (step {state.global_step})",
                     token=self.token,
-                    private=False
+                    private=self.is_private
                 )
                 print(f"[SUCCESS] Epoch {current_epoch} adapter weights LIVE on Hugging Face!")
         except Exception as e:
@@ -288,22 +297,22 @@ trainer = Trainer(
     args=training_args,
     train_dataset=tokenized_dataset,
     data_collator=DataCollatorForSeq2Seq(tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
-    callbacks=[EpochPushCallback(OUTPUT_REPO, HF_TOKEN)]
+    callbacks=[EpochPushCallback(OUTPUT_REPO, HF_TOKEN, is_private=IS_PRIVATE)]
 )
 
 train_result = trainer.train()
 print(f"Training completed successfully! Global Steps: {trainer.state.global_step}, Train Loss: {train_result.training_loss:.4f}")
 
 # 6. Save & Push to Hugging Face Hub
-print(f"\n[Step 6/6] Saving LoRA adapter and pushing to https://huggingface.co/{OUTPUT_REPO} ...")
+print(f"\n[Step 6/6] Saving LoRA adapter and pushing to https://huggingface.co/{OUTPUT_REPO} (Private={IS_PRIVATE}) ...")
 os.makedirs(LORA_SAVE_DIR, exist_ok=True)
 model.save_pretrained(LORA_SAVE_DIR)
 tokenizer.save_pretrained(LORA_SAVE_DIR)
 
 print(f"Pushing model weights to {OUTPUT_REPO}...")
-model.push_to_hub(OUTPUT_REPO, token=HF_TOKEN)
+model.push_to_hub(OUTPUT_REPO, token=HF_TOKEN, private=IS_PRIVATE)
 print(f"Pushing tokenizer to {OUTPUT_REPO}...")
-tokenizer.push_to_hub(OUTPUT_REPO, token=HF_TOKEN)
+tokenizer.push_to_hub(OUTPUT_REPO, token=HF_TOKEN, private=IS_PRIVATE)
 
 print("=" * 70)
 print(f" SUCCESS! MedOrqis-LLM LoRA weights are now LIVE on Hugging Face:")
