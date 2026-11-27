@@ -1,0 +1,24 @@
+{
+  "title": "MedOrqis-LLM: Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain",
+  "description": "MedOrqis-LLM is a bilingual clinical foundation model fine-tuned for high-stakes medical reasoning, diagnostic decision support, and deterministic tool-calling. Proprietary intellectual property of Eng. Tarek Mohamed (Tarek Khallaf). Patent & Copyright Pending.",
+  "creators": [
+    {
+      "name": "Mohamed, Tarek",
+      "affiliation": "MedOrqis / Eternal Pharma",
+      "orcid": ""
+    }
+  ],
+  "access_right": "open",
+  "license": "other-closed",
+  "keywords": [
+    "medical-llm",
+    "clinical-decision-support",
+    "bilingual-medical-ai",
+    "arabic-clinical-nlp",
+    "qlora",
+    "karnak-6b",
+    "healthcare-ai"
+  ],
+  "upload_type": "software",
+  "publication_date": "2026-11-28"
+}
