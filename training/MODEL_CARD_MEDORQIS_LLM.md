@@ -2,7 +2,9 @@
 language:
 - en
 - ar
-license: apache-2.0
+license: other
+license_name: proprietary-restricted
+license_link: LICENSE
 base_model: Applied-Innovation-Center/Karnak-6B-v1.0
 tags:
 - medical
@@ -31,7 +33,8 @@ model-index:
 # MedOrqis-LLM
 ### Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: Proprietary & IP Protected](https://img.shields.io/badge/License-Proprietary_%26_IP_Protected-crimson.svg)](LICENSE)
+[![IP Status](https://img.shields.io/badge/IP_Status-Patent_%26_Copyright_Pending-purple.svg)](LICENSE)
 [![Base Model](https://img.shields.io/badge/Base_Model-Karnak--6B--v1.0-emerald.svg)](https://huggingface.co/Applied-Innovation-Center/Karnak-6B-v1.0)
 [![GitHub](https://img.shields.io/badge/GitHub-seotarek%2Fmedorqis--llm-black.svg?logo=github)](https://github.com/seotarek/medorqis-llm)
 [![Partner Ecosystem](https://img.shields.io/badge/Skills_Ecosystem-MedOrqis-6366f1.svg)](https://github.com/seotarek/MedOrqis)
@@ -150,7 +153,7 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ## 7. License & Citation
 
-Licensed under **Apache 2.0**.
+Licensed under **MedOrqis™ Proprietary & Restricted Research License** (Copyright © 2026 Eng. Tarek Mohamed / Tarek Khallaf. All Rights Reserved. Patent & Copyright Pending). See LICENSE for details.
 
 ```bibtex
 @misc{medorqis_llm_2026,

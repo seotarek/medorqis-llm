@@ -7,7 +7,8 @@ language_creators:
 language:
 - ar
 - en
-license: apache-2.0
+license: other
+license_name: proprietary-restricted
 multilinguality:
 - bilingual
 size_categories:
@@ -70,4 +71,4 @@ Each JSONL record represents a conversational session with:
 
 ## License & Attribution
 
-Licensed under Apache 2.0. Developed as part of the MedOrqis Medical AI Skills Ecosystem.
+Licensed under MedOrqis™ Proprietary & Restricted Research License (Copyright © 2026 Eng. Tarek Mohamed. All Rights Reserved. Patent & Copyright Pending). Developed as part of the MedOrqis Medical AI Skills Ecosystem.

@@ -1,7 +1,8 @@
 # MedOrqis-LLM
 ### Bilingual (Arabic/English) Medical Foundation Model & Clinical Tool-Calling Brain
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![License: Proprietary & IP Protected](https://img.shields.io/badge/License-Proprietary_%26_IP_Protected-crimson.svg)](LICENSE)
+[![IP Status](https://img.shields.io/badge/IP_Status-Patent_%26_Copyright_Pending-purple.svg)](LICENSE)
 [![Base Model](https://img.shields.io/badge/Base_Model-Karnak--6B--v1.0-emerald.svg)](https://huggingface.co/Applied-Innovation-Center/Karnak-6B-v1.0)
 [![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Model-seotarek%2Fmedorqis--llm-yellow.svg)](https://huggingface.co/seotarek/medorqis-llm)
 [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20HF%20Space-Interactive%20Clinical%20Bench-blue.svg)](https://huggingface.co/spaces/seotarek/medorqis-llm-demo)
@@ -13,7 +14,7 @@
 
 ## 1. Overview & Architectural Lineage
 
-**MedOrqis-LLM** is an open-weights, bilingual (Arabic & English) clinical decision-intelligence foundation model. Fine-tuned on top of **`Applied-Innovation-Center/Karnak-6B-v1.0`** via **QLoRA (4-bit NF4)**, it acts as the primary **Clinical Brain** of the MedOrqis ecosystem.
+**MedOrqis-LLM** is a bilingual (Arabic & English) clinical decision-intelligence foundation model. Fine-tuned on top of **`Applied-Innovation-Center/Karnak-6B-v1.0`** via **QLoRA (4-bit NF4)**, it acts as the primary **Clinical Brain** of the MedOrqis ecosystem.
 
 ### Architectural Ancestry & Lineage Chain
 To maintain strict scientific documentation integrity:
@@ -178,7 +179,9 @@ MedOrqis-LLM natively routes clinical calculations to 12 deterministic functions
 
 ## 8. License & Citation
 
-Licensed under **Apache 2.0**.
+Licensed under **MedOrqis™ Proprietary & Restricted Research License** (Copyright © 2026 Eng. Tarek Mohamed / Tarek Khallaf. All Rights Reserved. Patent & Copyright Pending). See [LICENSE](LICENSE) for full terms.
+
+> **Notice**: Early baseline proof-of-concept scripts (v0.1) were shared under Apache 2.0 during initial academic testing. All post-trained clinical weights, specialized tool-calling adapters, curated bilingual datasets, and the production MedOrqis ecosystem are strictly proprietary and registered.
 
 ```bibtex
 @misc{medorqis_llm_2026,
